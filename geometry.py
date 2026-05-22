@@ -16,7 +16,8 @@ GEO = dict(
     w_open    = 2.8,    # slot opening width  (mm)
     h_neck    = 0.6,    # neck depth (mm)
     h_slot    = 18.5,   # total slot depth  (mm)
-    w_bottom  = 6.0,    # slot width at bottom (mm)
+    w_bottom  = 5.444,  # slot body width at bottom (mm) — from lamination drawing
+    R_bot     = 3.885,  # slot bottom arc radius (mm)  — from lamination drawing
     # rotor
     R_re      = 57.0,
     R_bar_bot = 37.6,
@@ -29,28 +30,37 @@ GEO = dict(
 )
 
 # ── Base slot vertices (slot centred on +X axis) ──────────────────────────────
-# P1/P6 : bore opening (R_si, ±w_open/2)
-# P2/P5 : neck end    (R_si + h_neck, ±w_open/2)
-# P3/P4 : body bottom (R_si + h_slot, ±w_bottom/2)
-_g = GEO
-_hw = _g['w_open'] / 2           # 1.4 mm
-_hb = _g['w_bottom'] / 2         # 3.0 mm
-_Rn = _g['R_si'] + _g['h_neck']  # 58.1 mm
-_Rb = _g['R_si'] + _g['h_slot']  # 76.0 mm
+# P1/P6 : bore opening (R_si, ±w_open/2)     – Cartesian y = ±1.4 mm
+# P2/P5 : neck end    (_Rn,  ±w_open/2)     – same y → rectangular neck
+# P3/P4 : body bottom (_Rb,  ±w_bottom/2)   – Cartesian y = ±2.722 mm
+#
+# The straight walls P2→P3 and P5→P4 taper from ±1.4 mm to ±2.722 mm
+# in Cartesian y, matching the lamination drawing (5.444 mm body width).
+# The slot bottom is a circular arc of radius R_bot = 3.885 mm connecting
+# P3 and P4, curving away from the bore (deepening the slot by ~1.1 mm).
+_g  = GEO
+_hw = _g['w_open'] / 2           # 1.400 mm  (half opening)
+_hb = _g['w_bottom'] / 2         # 2.722 mm  (half body width at bottom)
+_Rn = _g['R_si'] + _g['h_neck']  # 58.100 mm (neck-end radius)
+_Rb = _g['R_si'] + _g['h_slot']  # 76.000 mm (body-end radius)
 
 _BASE = [
-    (_g['R_si'], +_hw),   # P1 – bore, counterclockwise (CCW) side
+    (_g['R_si'], +_hw),   # P1 – bore, CCW side
     (_Rn,        +_hw),   # P2 – neck end, CCW
-    (_Rb,        +_hb),   # P3 – body bottom, CCW
-    (_Rb,        -_hb),   # P4 – body bottom, CW
+    (_Rb,        +_hb),   # P3 – body bottom, CCW  (Cartesian y = +2.722)
+    (_Rb,        -_hb),   # P4 – body bottom, CW   (Cartesian y = −2.722)
     (_Rn,        -_hw),   # P5 – neck end, CW
     (_g['R_si'], -_hw),   # P6 – bore, CW side
 ]
 
 # Arc spans at the bore level
 _HALF_DEG  = math.degrees(math.asin(_hw / _g['R_si']))   # ≈ 1.394°
-_SLOT_ARC  = 2.0 * _HALF_DEG                              # ≈ 2.788°  (opening)
-_TOOTH_ARC = 360.0 / _g['Q_s'] - _SLOT_ARC               # ≈ 2.212°  (tooth face)
+_SLOT_ARC  = 2.0 * _HALF_DEG                              # ≈ 2.788° (opening)
+_TOOTH_ARC = 360.0 / _g['Q_s'] - _SLOT_ARC               # ≈ 2.212° (tooth face)
+
+# Slot-bottom arc: P4 → P3 CCW, radius R_bot = 3.885 mm
+# chord = 2 × _hb = 5.444 mm → angle = 2 × arcsin(2.722/3.885) ≈ 89.0°
+_BOT_ARC = 2.0 * math.degrees(math.asin(_hb / _g['R_bot']))   # ≈ 89.0°
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -90,7 +100,7 @@ def draw_stator_slots():
         # 5 slot walls
         femm.mi_drawline(*P1, *P2)   # right neck
         femm.mi_drawline(*P2, *P3)   # right body taper
-        femm.mi_drawline(*P3, *P4)   # slot bottom (straight)
+        femm.mi_drawarc(*P4, *P3, _BOT_ARC, 5)  # slot bottom arc ≈89°, 5°/seg
         femm.mi_drawline(*P4, *P5)   # left body taper
         femm.mi_drawline(*P5, *P6)   # left neck
 
