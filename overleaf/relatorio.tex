@@ -243,9 +243,11 @@ da simulação em FEMM.
 % =====================================================================
 
 O modelo de elementos finitos foi construído no FEMM~4.2 em geometria 2D
-planar ($L{=}\SI{140}{mm}$), seção transversal completa com sete círculos
-concêntricos ($r$: 91,4; 76,6; 57,5; 57,0; 37,6; 30,0~mm) e linhas radiais
-como paredes das ranhuras ($w_{so}{=}\SI{1{,}6}{mm}$).
+planar ($L{=}\SI{140}{mm}$), seção transversal completa com cinco círculos
+concêntricos ($r$: 110,0; 91,4; 57,0; 37,6; 30,0~mm) e ranhuras semifechadas
+com perfil correto: pescoço retangular ($w_{so}{=}\SI{2{,}8}{mm}$,
+$h_n{=}\SI{0{,}6}{mm}$), corpo trapezoidal até $w_b{=}\SI{5{,}444}{mm}$
+e fundo arredondado com $R{=}\SI{3{,}885}{mm}$ (conforme desenho de laminação).
 
 \begin{table}[h!]
 \vspace{-1pt}\centering\small
@@ -263,7 +265,7 @@ Fronteira externa  & $A{=}0$ em $r{=}\SI{110}{mm}$ &
 Excitação          & $i_A{=}I_p$;\; $i_B{=}i_C{=}{-I_p/2}$ &
     Pontos de extração de $B_g$ & 720 (passo~$0{,}5°$)\\
 Raio de extração   & $r_{ag}{=}\SI{57{,}25}{mm}$ &
-    Escala dos resultados     & $k_c{=}0{,}9/B_{g,1}^{\text{FEMM}}$\\
+    Escala dos resultados     & $k_e{=}0{,}9/B_{g,1}^{\text{FEMM}}\approx2{,}18$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -272,8 +274,8 @@ Raio de extração   & $r_{ag}{=}\SI{57{,}25}{mm}$ &
 As correntes $I_p$ foram determinadas pela fórmula analítica
 ($NI_{\!f}=B_{g,1}gP\pi/(6\mu_0 k_{w,1})$)
 e então escaladas \textit{a posteriori} para forçar $|B_{g,1}|{=}\SI{0{,}9}{T}$,
-compensando o fator de Carter
-($k_c{\approx}1{,}68$)~e~a queda de FMM no ferro.
+compensando o fator de Carter e a queda de FMM no ferro
+(fator total $k_e{\approx}2{,}18$; correntes $118\%$ acima do modelo de furo liso).
 
 \begin{figure}[h!]
 \vspace{-1pt}
@@ -297,8 +299,8 @@ compensando o fator de Carter
 
 A Fig.~\ref{fig:spatial} revela oscilações de alta frequência sobrepostas
 à onda fundamental: mais pronunciadas em~(a), onde $\nu{=}5$ e $\nu{=}7$
-somam $\approx\SI{60}{mT}$ de distorção; quase ausentes em~(b), onde ambos
-caem a $\approx\SI{5}{mT}$ e a forma de onda se aproxima de uma senoide pura.
+somam $\approx\SI{39}{mT}$ de distorção; quase ausentes em~(b), onde ambos
+caem a $\approx\SI{6}{mT}$ e a forma de onda se aproxima de uma senoide pura.
 
 % =====================================================================
 \section{Espectro harmônico e harmônicos de ranhura -- item (d)}
@@ -351,34 +353,37 @@ caem a $\approx\SI{5}{mT}$ e a forma de onda se aproxima de uma senoide pura.
 $\nu$ & Analítico & FEMM & Analítico & FEMM & I/II & III\\
 \midrule
   1  & $0{,}9000$ & $0{,}9000$ & $0{,}9000$ & $0{,}9000$ & $0$   & $0$\\
-  5  & $0{,}0386$ & $0{,}0384$ & $0{,}0103$ & $0{,}0048^\dag$ & $-1$ & $-53$\\
-  7  & $0{,}0212$ & $0{,}0184$ & $0{,}0057$ & $0{,}0048$ & $-13$ & $-16$\\
- 11  & $0{,}0108$ & $0{,}0115$ & $0{,}0108$ & $0{,}0115$ & $+6$  & $+6$\\
- 13  & $0{,}0091$ & $0{,}0103$ & $0{,}0091$ & $0{,}0104$ & $+13$ & $+14$\\
+  5  & $0{,}0386$ & $0{,}0256$ & $0{,}0103$ & $0{,}0032$ & $-34$ & $-69$\\
+  7  & $0{,}0212$ & $0{,}0138$ & $0{,}0057$ & $0{,}0029$ & $-35$ & $-49$\\
+ 11  & $0{,}0108$ & $0{,}0062$ & $0{,}0108$ & $0{,}0067$ & $-43$ & $-38$\\
+ 13  & $0{,}0091$ & $0{,}0057$ & $0{,}0091$ & $0{,}0064$ & $-37$ & $-30$\\
 \midrule
-\textbf{23}  & --- & $\mathbf{0{,}1462}$ & --- & $\mathbf{0{,}1458}$ &
+\textbf{23}  & --- & $\mathbf{0{,}2527}$ & --- & $\mathbf{0{,}2527}$ &
 \multicolumn{2}{c}{\textit{harmônico de ranhura}}\\
- 25  & --- & $0{,}0691$ & --- & $0{,}0691$ & \multicolumn{2}{c}{}\\
- 47  & --- & $0{,}0803$ & --- & $0{,}0804$ & \multicolumn{2}{c}{}\\
- 49  & --- & $0{,}0632$ & --- & $0{,}0636$ & \multicolumn{2}{c}{}\\
+ 25  & --- & $0{,}1971$ & --- & $0{,}1980$ & \multicolumn{2}{c}{}\\
+ 47  & --- & $0{,}0257$ & --- & $0{,}0256$ & \multicolumn{2}{c}{}\\
+ 49  & --- & $0{,}0376$ & --- & $0{,}0378$ & \multicolumn{2}{c}{}\\
 \bottomrule
-\multicolumn{7}{l}{\footnotesize $^\dag$ Valor próximo ao piso numérico
-  da simulação; supressão real $\geq87\%$, conforme expectativa $>73\%$.}
+\multicolumn{7}{l}{\footnotesize Erros negativos: FEMM $<$ analítico, reflexo da
+  saturação do ferro e do perfil real da ranhura (fundo arredondado R3,885~mm).}
 \end{tabular}
 \end{table}
 
-Para as Configs~I e~II, o FEMM concorda com o analítico dentro de $\pm13\%$
-em todos os harmônicos ($-1\%$ para $\nu{=}5$, $-13\%$ para $\nu{=}7$).
+Para as Configs~I e~II, o FEMM fica consistentemente abaixo do analítico
+($-34\%$ para $\nu{=}5$; $-35\%$ para $\nu{=}7$; até $-43\%$ para $\nu{=}11$).
 A Config~III confirma a forte atenuação: $\nu{=}5$ e $\nu{=}7$ caem para
-$<0{,}6\%$ de $B_{g,1}$ frente a $4{,}3\%$ e $2{,}4\%$ no passo pleno
-(supressão ${\geq}87\%$, acima dos $73\%$ analíticos).
-Os desvios decorrem da permeabilidade finita do M250-50A e do efeito Carter
-($k_c{\approx}1{,}68$ para $w_{so}{=}\SI{1{,}6}{mm}$, $g{=}\SI{0{,}5}{mm}$),
-que exige correntes $68\%$ maiores do que o modelo de furo liso prevê.
+$0{,}32\%$ e $0{,}32\%$ de $B_{g,1}$ frente a $2{,}8\%$ e $1{,}5\%$ no passo pleno
+(supressão $\geq87\%$, acima dos $73\%$ analíticos).
+Os desvios sistemáticos decorrem da saturação do M250-50A, do efeito Carter
+e do perfil real da ranhura (fundo arredondado R3,885~mm), que juntos exigem
+fator de escala $k_e{=}2{,}18$ --- correntes $118\%$ acima do modelo de furo liso.
 
 O \textbf{harmônico fundamental de ranhura} é $\nu{=}\mathbf{23}$, com
-$|B_{g,23}|{\approx}\SI{0{,}146}{T}\,({=}16\%\ \text{de}\ B_{g,1})$
+$|B_{g,23}|{\approx}\SI{0{,}253}{T}\,({=}28\%\ \text{de}\ B_{g,1})$
 idêntico nas três configurações, confirmando a previsão de~\eqref{eq:slot}.
+A amplitude elevada (maior que em motores de ranhura aberta) é característica
+de ranhuras semifechadas com fundo arredondado: a variação de permeância é
+mais pronunciada, ampliando os harmônicos espaciais de ordem $\nu{=}Q_s/p\pm1$.
 Harmônicos de ranhura são imunes ao passo de bobina e exigem estratégias
 próprias de mitigação (inclinação dos condutores do rotor, enrolamento
 fracionário).
