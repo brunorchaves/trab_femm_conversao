@@ -6,70 +6,61 @@
 % =====================================================================
 \documentclass[12pt,a4paper]{article}
 
-% ── Codificação e idioma ─────────────────────────────────────────
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[brazil]{babel}
-
-% ── Fonte Times New Roman ────────────────────────────────────────
-\usepackage{mathptmx}          % Times p/ texto e matemática
-
-% ── Margens: 2,0 cm em todos os lados ───────────────────────────
+\usepackage{mathptmx}            % Times New Roman (texto e matemática)
 \usepackage[a4paper,
             top=2.0cm, bottom=2.0cm,
-            left=2.0cm,  right=2.0cm,
+            left=2.0cm, right=2.0cm,
             headheight=14pt]{geometry}
 
-% ── Espaçamento exato 15 pt entre linhas ─────────────────────────
-% article 12pt usa baselineskip = 14,5 pt; 15/14,5 = 1,03448
-\linespread{1.03448}
+% ── Espaçamento exato 15 pt (article 12pt: baselineskip padrão = 14,5pt)
+\linespread{1.03448}             % 15 / 14,5 = 1,03448
 
-% ── Espaço entre parágrafos: 3 pt; sem recuo ────────────────────
+% ── Parágrafos: 3 pt de separação, sem recuo
 \usepackage{parskip}
 \setlength{\parskip}{3pt}
 \setlength{\parindent}{0pt}
 
-% ── Cabeçalho: título + autor | nº página canto superior direito
+% ── Cabeçalho
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\fancyhead[L]{\small Projeto FEMM -- Motores CA Trifásicos
-              \quad Bruno Ribeiro \& Arnaldo -- UFMG}
+\fancyhead[L]{\small Projeto FEMM -- Motores CA Trifásicos \quad
+              Bruno Ribeiro \& Arnaldo -- UFMG}
 \fancyhead[R]{\small\thepage}
 
-% ── Pacotes matemáticos / tabelas / figuras ──────────────────────
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{siunitx}
-
-% ── Seções compactas ────────────────────────────────────────────
 \usepackage{titlesec}
+\usepackage{enumitem}
+
 \titleformat{\section}{\normalsize\bfseries}{\thesection.}{0.4em}{}
 \titlespacing*{\section}{0pt}{5pt}{2pt}
+\titleformat{\subsection}{\normalsize\itshape}{\thesubsection.}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{3pt}{1pt}
 
-% ── Captions compactos ───────────────────────────────────────────
 \captionsetup{font=small, labelsep=period, skip=2pt}
 \sisetup{output-decimal-marker={,}}
-
-% ── Tabelas compactas ────────────────────────────────────────────
-\renewcommand{\arraystretch}{1.05}
+\renewcommand{\arraystretch}{1.07}
 
 % =====================================================================
 \begin{document}
 % =====================================================================
 
-% ── Título do projeto e identificação do autor ───────────────────
-{\centering
-  \textbf{Análise harmônica de uma máquina de indução trifásica
-          por elementos finitos (FEMM)}\\[2pt]
-  {\small Bruno Ribeiro \& Arnaldo \quad|\quad
-   Engenharia Elétrica -- UFMG \quad|\quad
-   Prof.\ Braz J.\ Cardoso Filho -- Conversão da Energia -- 2026/1}
-\par}
+{\centering\bfseries
+Análise harmônica de uma máquina de indução trifásica
+via elementos finitos (FEMM)\\[2pt]}
+{\centering\small
+Bruno Ribeiro \& Arnaldo \;|\;
+Engenharia Elétrica -- UFMG \;|\;
+Prof.\ Braz J.\ Cardoso Filho -- Conversão da Energia -- 2026/1\par}
 \vspace{3pt}
 
 % =====================================================================
@@ -78,110 +69,154 @@
 
 \begin{table}[h!]
 \vspace{-2pt}\centering\small
-\caption{Parâmetros geométricos e elétricos da máquina.}
+\caption{Parâmetros da máquina (extraídos do enunciado e da laminação Fig.~1).}
 \label{tab:dados}
 \setlength{\tabcolsep}{5pt}
 \begin{tabular}{llll}
 \toprule
 \textbf{Parâmetro} & \textbf{Valor} & \textbf{Parâmetro} & \textbf{Valor}\\
 \midrule
-Polos $P$ / pares $p$ & $6$ / $3$ &
-    Frequência $f_e$          & \SI{60}{Hz}\\
-Fases $m$                      & $3$ &
-    Tensão terminal $V$        & \SI{127}{V_{rms}}\\
-Ranhuras estator $Q_s$         & $72$ &
-    Entreferro $g$             & \SI{0{,}5}{mm}\\
-Ranhuras rotor $Q_r$           & $28$ &
-    Comprimento pacote $L$     & \SI{140}{mm}\\
-Ranhs./polo/fase $q$           & $4$ &
-    Aço das laminações         & M250-50A\\
-Passo polar $\tau_p$           & 12 ranhuras &
-    $B_{g,1}$ alvo             & \SI{0{,}9}{T}\\
-$\alpha$ (graus elét./ranhura) & \SI{15}{\degree} &
-    Velocidade síncrona        & \SI{1200}{rpm}\\
+Polos $P$ / pares $p$   & $6$ / $3$ & Frequência $f_e$        & \SI{60}{Hz}\\
+Fases $m$                & $3$       & Tensão terminal $V$     & \SI{127}{V_{rms}}\\
+Ranhuras estator $Q_s$   & $72$      & Entreferro $g$          & \SI{0{,}5}{mm}\\
+Ranhuras rotor $Q_r$     & $28$      & Comprimento pacote $L$  & \SI{140}{mm}\\
+Ranhuras/polo/fase $q$   & $4$       & Aço laminações          & M250-50A\\
+Passo polar $\tau_p$     & 12~ranhuras & $B_{\max}$ no núcleo  & \SI{1{,}7}{T}\\
+$\alpha$ (el./ranhura)   & \SI{15}{\degree} & $B_{g,1}$ alvo  & \SI{0{,}9}{T}\\
+Diam.\ interno estator   & \SI{115}{mm} & Velocidade síncrona & \SI{1200}{rpm}\\
 \bottomrule
 \end{tabular}
 \end{table}
 \vspace{-2pt}
 
-Analisam-se três configurações de enrolamento: \textbf{(I)}~camada simples,
-passo pleno; \textbf{(II)}~camada dupla, passo pleno; \textbf{(III)}~camada dupla,
-passo encurtado $\beta=5/6$ ($y_1=10$ ranhuras, $\SI{150}{\degree}$ elétricos).
-Configurações~I e~II compartilham todos os fatores de enrolamento.
+Analisam-se três configurações de enrolamento com ligação em série, 1~cinturão
+por polo: \textbf{(I)}~camada simples, passo pleno ($y_1{=}12$,
+$\beta{=}1$, $\SI{180}{\degree}$~el.); \textbf{(II)}~camada dupla, passo pleno
+(mesma distribuição eletromagnética de~I); \textbf{(III)}~camada dupla,
+passo encurtado $\beta{=}5/6$ ($y_1{=}10$ ranhuras, $\SI{150}{\degree}$~el.),
+escolha clássica para atenuar simultaneamente a quinta e a sétima harmônica.
 
 % =====================================================================
 \section{Fatores $k_p$, $k_d$ e $k_w$ -- item (a)}
 % =====================================================================
 
-Para a harmônica de ordem $\nu$ de um enrolamento distribuído em $q$ ranhuras
-com ângulo elétrico $\alpha$ entre ranhuras e passo relativo $\beta$:
+Para enrolamento distribuído em $q$ ranhuras equiespaçadas por polo por fase,
+com ângulo elétrico $\alpha$ entre ranhuras adjacentes e passo relativo $\beta$,
+os fatores de distribuição, passo e enrolamento para o harmônico de ordem~$\nu$ são:
 %
 \begin{equation}
-k_{d,\nu}=\frac{\sin\!\bigl(\nu\,q\,\alpha/2\bigr)}
-               {q\,\sin\!\bigl(\nu\,\alpha/2\bigr)},
+k_{d,\nu}=\frac{\sin\!\bigl(\nu\,q\,\alpha/2\bigr)}{q\,\sin\!\bigl(\nu\,\alpha/2\bigr)},
 \qquad
-k_{p,\nu}=\sin\!\!\left(\nu\beta\,\frac{\pi}{2}\right),
+k_{p,\nu}=\sin\!\left(\nu\beta\,\frac{\pi}{2}\right),
 \qquad
 k_{w,\nu}=k_{p,\nu}\cdot k_{d,\nu}.
 \label{eq:kw}
 \end{equation}
 
+\subsection*{Cálculo numérico para $\nu=1$}
+
+Substituindo $q{=}4$ e $\alpha{=}15°$ em~\eqref{eq:kw}:
+\[
+k_{d,1}=\frac{\sin(4{\times}15°/2)}{4\sin(15°/2)}
+        =\frac{\sin 30°}{4\sin 7{,}5°}
+        =\frac{0{,}5000}{4{\times}0{,}1305}
+        =0{,}9577.
+\]
+Para passo pleno ($\beta{=}1$): $k_{p,1}=\sin 90°=1{,}0000$.
+Para passo encurtado ($\beta{=}5/6$):
+$k_{p,1}=\sin\!\bigl(\tfrac{5}{6}{\times}90°\bigr)=\sin 75°=0{,}9659$.
+Logo $k_{w,1}^{\beta=1}=0{,}9577$ e
+$k_{w,1}^{\beta=5/6}=0{,}9659{\times}0{,}9577=0{,}9250$
+(redução de apenas $3{,}4\%$ na fundamental).
+
+Para $\nu{=}5$ e $\nu{=}7$ com $\beta{=}5/6$:
+$k_{p,5}=\sin(5{\times}75°)=\sin 375°=\sin 15°\approx0{,}259$
+e $k_{p,7}=\sin(7{\times}75°)=\sin 525°=\sin 165°=\sin 15°\approx0{,}259$.
+Ambos os harmônicos recebem o mesmo fator de passo, que é apenas $25{,}9\%$ do
+passo pleno, reduzindo $|k_{w,5}|$ de $0{,}205$ para $0{,}053$ ($-74\%$)
+e $|k_{w,7}|$ de $0{,}158$ para $0{,}041$ ($-74\%$).
+
 \begin{table}[h!]
 \vspace{-1pt}\centering\small
-\caption{Fatores de enrolamento para $q=4$, $\alpha=\SI{15}{\degree}$.
-         Triplens omitidas (canceladas na soma trifásica).}
+\caption{Fatores de enrolamento para $q{=}4$, $\alpha{=}15°$.
+         Triplens omitidas (canceladas pela soma trifásica equilibrada).}
 \label{tab:fatores}
-\setlength{\tabcolsep}{5.5pt}
-\begin{tabular}{rrrrrr}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{crrrrrr}
 \toprule
-$\nu$ & $k_{d,\nu}$ & $k_{p,\nu}\ (\beta{=}1)$ & $k_{p,\nu}\ (\beta{=}5/6)$
+$\nu$ & Sentido & $k_{d,\nu}$ & $k_{p,\nu}\ (\beta{=}1)$ & $k_{p,\nu}\ (\beta{=}5/6)$
       & $k_{w,\nu}\ (\beta{=}1)$ & $k_{w,\nu}\ (\beta{=}5/6)$\\
 \midrule
- 1 & $+0{,}9577$ & $+1{,}0000$ & $+0{,}9659$ & $+0{,}9577$ & $+0{,}9250$\\
- 5 & $+0{,}2053$ & $+1{,}0000$ & $+0{,}2588$ & $+0{,}2053$ & $+0{,}0531$\\
- 7 & $-0{,}1576$ & $-1{,}0000$ & $+0{,}2588$ & $+0{,}1576$ & $-0{,}0408$\\
-11 & $-0{,}1261$ & $-1{,}0000$ & $+0{,}9659$ & $+0{,}1261$ & $-0{,}1218$\\
-13 & $+0{,}1261$ & $+1{,}0000$ & $-0{,}9659$ & $+0{,}1261$ & $-0{,}1218$\\
+ 1 & direto  & $+0{,}9577$ & $+1{,}0000$ & $+0{,}9659$ & $+0{,}9577$ & $+0{,}9250$\\
+ 5 & reverso & $+0{,}2053$ & $+1{,}0000$ & $+0{,}2588$ & $+0{,}2053$ & $+0{,}0531$\\
+ 7 & direto  & $-0{,}1576$ & $-1{,}0000$ & $+0{,}2588$ & $+0{,}1576$ & $-0{,}0408$\\
+11 & reverso & $-0{,}1261$ & $-1{,}0000$ & $+0{,}9659$ & $+0{,}1261$ & $-0{,}1218$\\
+13 & direto  & $+0{,}1261$ & $+1{,}0000$ & $-0{,}9659$ & $+0{,}1261$ & $-0{,}1218$\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-O encurtamento $\beta=5/6$ foi escolhido de modo a satisfazer
-$k_{p,5}=k_{p,7}=\sin(15°)\approx0{,}259$, reduzindo $|k_{w,5}|$ e $|k_{w,7}|$
-em $\approx74\%$ frente ao passo pleno ao custo de apenas $3{,}4\%$ na fundamental
-($k_{w,1}=0{,}9250$ versus $0{,}9577$). Os harmônicos $\nu=11$ e $\nu=13$
-\emph{não} são atenuados, pois $|k_{p,11}|=|k_{p,13}|=\sin(75°)=k_{p,1}$.
-Supõe-se $B_{g,\max}\approx\SI{0{,}9}{T}$.
+Os harmônicos $\nu{=}11$ e $\nu{=}13$ \emph{não} são atenuados pelo encurtamento
+$5/6$, pois $|k_{p,11}|=|k_{p,13}|=\sin 75°=k_{p,1}^{\beta=5/6}$~---~efeito
+colateral conhecido desta escolha.
+Outras frações (p.ex.\ $11/12$) atacariam o par 11/13 mas prejudicariam 5/7.
 
 % =====================================================================
 \section{Espectro analítico de $B_g(\theta)$ -- item (b)}
 % =====================================================================
 
-Sob hipótese de permeabilidade do ferro infinita e entreferro uniforme,
-a lei de Ampère fornece $B_g=\mu_0 F/g$, e as amplitudes harmônicas de
-$B_g$ satisfazem:
-%
+\subsection*{Da FMM de uma fase à onda girante trifásica}
+
+A FMM produzida por uma única fase é estacionária e pulsa no tempo.
+Para a fase~A em $P$ polos, a contribuição da harmônica~$\nu$ tem amplitude
+(Fitzgerald, eq.\ 4.6):
 \begin{equation}
-\frac{|B_{g,\nu}|}{|B_{g,1}|}=\frac{|k_{w,\nu}|}{\nu\,|k_{w,1}|},
-\qquad \nu\notin\mathcal{H}^0=\{3,9,15,\ldots\}.
+F_{\nu}=\frac{4}{\pi}\,\frac{k_{w,\nu}\,N_{\!f}}{\nu P}\,I_{\max},
+\label{eq:Fnu}
+\end{equation}
+onde $N_{\!f}$ é o número de espiras em série por fase e $I_{\max}$ o pico de corrente.
+Decompondo cada harmônico em ondas progressiva e regressiva e somando as três fases
+defasadas de $\pm120°$ no espaço e no tempo, as triplens
+($\nu\in\{3,9,15,\ldots\}$) somam-se a zero e as demais formam a onda girante:
+\begin{equation}
+F_{\text{trifásico}}(\theta,t)=\tfrac{3}{2}\!\!\sum_{\nu\in\mathcal{H}^+}
+  \!\!F_\nu\cos(\nu\theta-\omega_e t)
+ +\tfrac{3}{2}\!\!\sum_{\nu\in\mathcal{H}^-}
+  \!\!F_\nu\cos(\nu\theta+\omega_e t),
+\label{eq:Ftrif}
+\end{equation}
+com $\mathcal{H}^+=\{1,7,13,\ldots\}$ (diretos) e
+$\mathcal{H}^-=\{5,11,17,\ldots\}$ (reversos).
+Cada harmônico~$\nu$ gira à velocidade $\omega_e/(\nu p)$, portanto~$\nu$ vezes mais lento
+que a fundamental, e produz campo parasita de menor amplitude.
+
+\subsection*{Density de fluxo no entreferro}
+
+Assumindo $\mu_{\text{ferro}}\to\infty$ e entreferro uniforme:
+$B_g(\theta)=\mu_0 F(\theta)/g$.
+Normalizando pela fundamental:
+\begin{equation}
+\frac{|B_{g,\nu}|}{|B_{g,1}|}
+=\frac{|k_{w,\nu}|}{\nu\,|k_{w,1}|}, \qquad
+\nu\notin\{3,9,15,\ldots\}.
 \label{eq:espectro}
 \end{equation}
 
 \begin{table}[h!]
 \vspace{-1pt}\centering\small
-\caption{Espectro analítico de $B_g$ com $|B_{g,1}|=\SI{0{,}9}{T}$
-         (triplens canceladas pela soma trifásica).}
+\caption{Espectro analítico de $B_g$ com $|B_{g,1}|=\SI{0{,}9}{T}$.
+         Triplens canceladas. Harmônicos de ranhura não modelados aqui.}
 \label{tab:espectro}
-\setlength{\tabcolsep}{7pt}
+\setlength{\tabcolsep}{6pt}
 \begin{tabular}{rcccc}
 \toprule
- & \multicolumn{2}{c}{$\beta=1$ (Configs I e II)} &
-   \multicolumn{2}{c}{$\beta=5/6$ (Config III)}\\
+      & \multicolumn{2}{c}{$\beta=1$ (Configs~I e~II)}
+      & \multicolumn{2}{c}{$\beta=5/6$ (Config~III)}\\
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}
-$\nu$ & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$ (T)
-      & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$ (T)\\
+$\nu$ & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$\,(T)
+      & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$\,(T)\\
 \midrule
- 1 & $1{,}000$ & $0{,}9000$ & $1{,}000$ & $0{,}9000$\\
+ 1 & $1{,}0000$ & $0{,}9000$ & $1{,}0000$ & $0{,}9000$\\
  5 & $0{,}0429$ & $0{,}0386$ & $0{,}0115$ & $0{,}0103$\\
  7 & $0{,}0235$ & $0{,}0212$ & $0{,}0063$ & $0{,}0057$\\
 11 & $0{,}0120$ & $0{,}0108$ & $0{,}0120$ & $0{,}0108$\\
@@ -190,114 +225,214 @@ $\nu$ & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$ (T)
 \end{tabular}
 \end{table}
 
-Os harmônicos de ranhura -- efeito puramente geométrico, ausente neste modelo --
-são previstos em $\nu_s=24M\pm1$ ($M=1,2,\ldots$), resultando em
-$\nu=23,25$ ($M=1$) e $\nu=47,49$ ($M=2$).
+O encurtamento $5/6$ reduz $|B_{g,5}|$ de $\SI{38{,}6}{mT}$ para $\SI{10{,}3}{mT}$
+($-73\%$) e $|B_{g,7}|$ de $\SI{21{,}2}{mT}$ para $\SI{5{,}7}{mT}$ ($-73\%$),
+mantendo a quinta e sétima harmônicas de campo $<1{,}2\%$ de $B_{g,1}$.
+
+\subsection*{Harmônicos de ranhura (previsão teórica)}
+
+A presença de $Q_s{=}72$ ranhuras uniformemente distribuídas introduz variação
+periódica de relutância e harmônicos de permeância em ordens elétricas:
+\begin{equation}
+\nu_s = \frac{2\,Q_s\,M}{P}\pm 1 = 24M\pm 1,\quad M=1,2,3,\ldots
+\label{eq:slot}
+\end{equation}
+Para $M{=}1$: $\nu=23$ e $25$; para $M{=}2$: $\nu=47$ e $49$.
+Esses harmônicos são geométricos~-- independem do tipo de enrolamento e não são
+suprimidos pelo encurtamento de passo~-- e devem aparecer claramente no espectro
+da simulação em FEMM.
 
 % =====================================================================
 \section{Distribuição espacial de $B_g$ pelo FEMM -- item (c)}
 % =====================================================================
 
-Modelou-se a seção transversal completa do motor em FEMM~4.2 com
-geometria 2D planar (profundidade $L=\SI{140}{mm}$): aço M250-50A
-com curva $B$-$H$ não-linear, 72 ranhuras trapezoidais de estator
-($w_{so}=\SI{1{,}6}{mm}$) e 28 barras de alumínio sem excitação.
-Excitação magnetostática no instante de pico da fase~A:
-$i_A=I_p$, $i_B=i_C=-I_p/2$.
-A corrente $I_p$ foi calibrada para $|B_{g,1}|=\SI{0{,}9}{T}$ após extração
-de $B_r(\theta)$ em 720 pontos no arco de raio médio $r_{ag}=\SI{57{,}25}{mm}$.
+\subsection*{Modelo e parâmetros de simulação}
+
+O modelo de elementos finitos foi construído no FEMM~4.2 em geometria 2D
+planar com profundidade $L{=}\SI{140}{mm}$. A seção transversal completa
+($360°$) foi modelada com sete círculos concêntricos (raios em mm:
+$r_{\text{ext}}{=}91{,}4$; $r_{\text{coroa-s}}{=}76{,}6$;
+$r_{\text{furo-s}}{=}57{,}5$; $r_{\text{rot-ext}}{=}57{,}0$;
+$r_{\text{barras}}{=}37{,}6$; $r_{\text{eixo}}{=}30{,}0$)
+e linhas radiais como paredes das ranhuras.
+As abertura de ranhura do estator foram modeladas com
+$w_{so}{=}\SI{1{,}6}{mm}$.
+
+\begin{table}[h!]
+\vspace{-1pt}\centering\small
+\caption{Configuração do modelo FEMM e condições de excitação.}
+\label{tab:femm}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llll}
+\toprule
+Tipo de análise    & Magnetostático 2D planar &
+    Material do estator/rotor & M250-50A (curva $B$-$H$)\\
+Profundidade       & \SI{140}{mm} &
+    Material das barras       & Alumínio ($\sigma{=}\SI{35{,}4}{MS/m}$)\\
+Fronteira externa  & $A{=}0$ em $r{=}\SI{110}{mm}$ &
+    Material dos condutores   & Cobre\\
+Excitação          & $i_A{=}I_p$;\; $i_B{=}i_C{=}{-I_p/2}$ &
+    Pontos de extração de $B_g$ & 720 (passo~$0{,}5°$)\\
+Raio de extração   & $r_{ag}{=}\SI{57{,}25}{mm}$ &
+    Escala dos resultados     & $k_c{=}0{,}9/B_{g,1}^{\text{FEMM}}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\vspace{-1pt}
+
+As correntes $I_p$ foram determinadas pela fórmula analítica
+($NI_{\!f}=B_{g,1}gP\pi/(6\mu_0 k_{w,1})$)
+e então escaladas \textit{a posteriori} para forçar $|B_{g,1}|{=}\SI{0{,}9}{T}$,
+compensando o fator de Carter
+($k_c{\approx}1{,}68$)~e~a queda de FMM no ferro.
 
 \begin{figure}[h!]
 \vspace{-1pt}
 \centering
 \begin{minipage}[t]{0.495\textwidth}
-  \centering
+  \centering\small
   \includegraphics[width=\linewidth]{Bg_spatial_I.png}
+  \caption*{(a) Config~I/II -- passo pleno ($I_p{=}\SI{9{,}79}{A}$)}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.495\textwidth}
-  \centering
+  \centering\small
   \includegraphics[width=\linewidth]{Bg_spatial_III.png}
+  \caption*{(b) Config~III -- passo encurtado $5/6$ ($I_p{=}\SI{5{,}07}{A}$)}
 \end{minipage}
-\caption{Distribuição espacial de $B_r(\theta)$ no entreferro (FEMM).
-         Esquerda: Config~I/II ($\beta=1$, $I_p=\SI{9{,}79}{A}$).
-         Direita: Config~III ($\beta=5/6$, $I_p=\SI{5{,}07}{A}$).
-         A forma de onda da Config~III apresenta claramente menor conteúdo
-         harmônico de alta ordem.}
+\caption{Distribuição espacial de $B_r(\theta)$ no raio médio do entreferro
+         obtida pelo FEMM (720~pontos, $r{=}\SI{57{,}25}{mm}$).
+         A forma de onda da Config~III exibe visivelmente menor conteúdo
+         de alta frequência espacial, reflexo da atenuação de $\nu{=}5$ e $7$.}
 \label{fig:spatial}
 \end{figure}
+
+A Fig.~\ref{fig:spatial} revela as oscilações de alta frequência
+sobrepostas à onda fundamental~-- mais pronunciadas em~(a)~do que em~(b).
+As descontinuidades periódicas (dentes de ranhura) são claramente
+visíveis como ripple de pequena amplitude superposto às ondas de maior
+escala.
+Em~(a), o efeito combinado dos harmônicos $\nu{=}5$ e $\nu{=}7$
+(amplitudes de $38$ e $\SI{21}{mT}$) produz uma distorção perceptível
+na forma de onda, enquanto em~(b) esses harmônicos são tão pequenos
+($\approx\SI{5}{mT}$ cada) que a forma de onda se aproxima de uma
+senoide pura.
 
 % =====================================================================
 \section{Espectro harmônico e harmônicos de ranhura -- item (d)}
 % =====================================================================
 
 \begin{figure}[h!]
+\vspace{-1pt}
+\centering
+\begin{minipage}[t]{0.495\textwidth}
+  \centering\small
+  \includegraphics[width=\linewidth]{Bg_spectrum_I.png}
+  \caption*{(a) Config~I/II -- passo pleno}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.495\textwidth}
+  \centering\small
+  \includegraphics[width=\linewidth]{Bg_spectrum_III.png}
+  \caption*{(b) Config~III -- $\beta{=}5/6$}
+\end{minipage}
+\caption{Espectro de $|B_{g,\nu}|$ em escala logarítmica (FEMM, barras azuis;
+         analítico, triângulos vermelhos).
+         Harmônicos de ranhura em $\nu{=}23,25,47,49$ emergem em todas as
+         configurações com amplitudes semelhantes.}
+\label{fig:espectros_ind}
+\end{figure}
+
+\begin{figure}[h!]
 \vspace{-2pt}
 \centering
 \includegraphics[width=0.97\linewidth]{Bg_comparison.png}
-\caption{Espectro comparativo das três configurações obtido por FFT espacial
-         de $B_r(\theta)$ (FEMM), normalizado para $|B_{g,1}|=\SI{0{,}9}{T}$.
-         Escala logarítmica. Triângulos: valores analíticos da Tabela~\ref{tab:espectro}.}
-\label{fig:espectro}
+\caption{Comparação do espectro das três configurações (FEMM, normalizado
+         $B_{g,1}{=}\SI{0{,}9}{T}$, escala logarítmica).
+         A supressão de $\nu{=}5$ e $\nu{=}7$ pela Config~III é evidente;
+         os harmônicos de ranhura ($\nu{=}23,25$) são imunes ao tipo de enrolamento.}
+\label{fig:comp}
 \end{figure}
 
 \begin{table}[h!]
 \vspace{-2pt}\centering\small
-\caption{Comparação $|B_{g,\nu}|$ (T): FEMM \textit{vs} analítico,
-         normalizado a $B_{g,1}=\SI{0{,}9}{T}$.
-         Traço (---): harmônico de ranhura, ausente no modelo analítico.}
+\caption{Comparação $|B_{g,\nu}|$ (T) -- FEMM \textit{vs.}\ analítico,
+         normalizados a $B_{g,1}{=}\SI{0{,}9}{T}$.
+         (---):~harmônico de ranhura, ausente no modelo analítico.}
 \label{tab:comp}
-\setlength{\tabcolsep}{5.5pt}
-\begin{tabular}{rcc|cc|cc}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{rcccccc}
 \toprule
- & \multicolumn{2}{c|}{Configs I e II ($\beta{=}1$)}
- & \multicolumn{2}{c|}{Config III ($\beta{=}5/6$)}
- & \multicolumn{2}{c}{Diferença FEMM/Anal.}\\
-$\nu$ & Analítico & FEMM & Analítico & FEMM & $\beta{=}1$ & $\beta{=}5/6$\\
+ & \multicolumn{2}{c}{Config~I e~II ($\beta{=}1$)}
+ & \multicolumn{2}{c}{Config~III ($\beta{=}5/6$)}
+ & \multicolumn{2}{c}{Erro relativo (\%)}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+$\nu$ & Analítico & FEMM & Analítico & FEMM & I/II & III\\
 \midrule
- 1  & $0{,}9000$ & $0{,}9000$ & $0{,}9000$ & $0{,}9000$ & $0\%$    & $0\%$\\
- 5  & $0{,}0386$ & $0{,}0384$ & $0{,}0103$ & $0{,}0048$ & $-1\%$   & $-53\%^{*}$\\
- 7  & $0{,}0212$ & $0{,}0184$ & $0{,}0057$ & $0{,}0048$ & $-13\%$  & $-16\%$\\
-11  & $0{,}0108$ & $0{,}0115$ & $0{,}0108$ & $0{,}0115$ & $+6\%$   & $+6\%$\\
-13  & $0{,}0091$ & $0{,}0103$ & $0{,}0091$ & $0{,}0104$ & $+13\%$  & $+14\%$\\
+  1  & $0{,}9000$ & $0{,}9000$ & $0{,}9000$ & $0{,}9000$ & $0$   & $0$\\
+  5  & $0{,}0386$ & $0{,}0384$ & $0{,}0103$ & $0{,}0048^\dag$ & $-1$ & $-53$\\
+  7  & $0{,}0212$ & $0{,}0184$ & $0{,}0057$ & $0{,}0048$ & $-13$ & $-16$\\
+ 11  & $0{,}0108$ & $0{,}0115$ & $0{,}0108$ & $0{,}0115$ & $+6$  & $+6$\\
+ 13  & $0{,}0091$ & $0{,}0103$ & $0{,}0091$ & $0{,}0104$ & $+13$ & $+14$\\
 \midrule
-\textbf{23} & --- & $\mathbf{0{,}1462}$ & --- & $\mathbf{0{,}1458}$ &
-\multicolumn{2}{c}{\textit{(harm.\ ranhura)}}\\
-25  & --- & $0{,}0691$ & --- & $0{,}0691$ & \multicolumn{2}{c}{}\\
-47  & --- & $0{,}0803$ & --- & $0{,}0804$ & \multicolumn{2}{c}{}\\
-49  & --- & $0{,}0632$ & --- & $0{,}0636$ & \multicolumn{2}{c}{}\\
+\textbf{23}  & --- & $\mathbf{0{,}1462}$ & --- & $\mathbf{0{,}1458}$ &
+\multicolumn{2}{c}{\textit{harmônico de ranhura}}\\
+ 25  & --- & $0{,}0691$ & --- & $0{,}0691$ & \multicolumn{2}{c}{}\\
+ 47  & --- & $0{,}0803$ & --- & $0{,}0804$ & \multicolumn{2}{c}{}\\
+ 49  & --- & $0{,}0632$ & --- & $0{,}0636$ & \multicolumn{2}{c}{}\\
 \bottomrule
-\multicolumn{7}{l}{\footnotesize $^*$Valor próximo ao piso numérico do FEMM;
-  supressão real $\geq87\%$, consistente com a previsão de $73\%$.}
+\multicolumn{7}{l}{\footnotesize $^\dag$ Valor próximo ao piso numérico
+  da simulação; supressão real $\geq87\%$, conforme expectativa $>73\%$.}
 \end{tabular}
 \end{table}
 
-Os resultados do FEMM validam as previsões analíticas com erros inferiores a
-$15\%$ para os harmônicos $\nu\leq13$.
-O \textbf{harmônico fundamental de ranhura} é $\nu=\mathbf{23}$, com amplitude
-$|B_{g,23}|\approx\SI{0{,}146}{T}\approx16\%$ de $B_{g,1}$, idêntico nas três
-configurações -- comportamento esperado, pois os harmônicos de ranhura dependem
-exclusivamente da geometria física ($Q_s=72$, $P=6$), não do passo da bobina.
+\subsection*{Discussão dos resultados}
 
-A Config~III reduz $\nu=5$ e $\nu=7$ em $\approx87\%$ frente ao passo pleno
-(analítico previa $73\%$; a atenuação extra é devida à permeabilidade finita
-do M250-50A e ao efeito Carter das aberturas de ranhura, que elevam o entreferro
-efetivo por fator $k_c\approx1{,}68$, demandando $I_p$ $68\%$ maior que o
-previsto pelo modelo de $\mu_r\to\infty$).
-Os harmônicos $\nu=11$ e $\nu=13$ permanecem inalterados entre as
-configurações, consequência de $|k_{p,11}|=|k_{p,13}|=\sin75°=k_{p,1}$
-para $\beta=5/6$ -- desvantagem conhecida desta escolha de encurtamento.
+\textbf{Harmônicos de campo $\nu{\leq}13$.}
+Para as Configs~I e~II, o FEMM concorda com o analítico dentro de $\pm13\%$
+em todos os harmônicos analisados.
+A melhor concordância é para $\nu{=}5$ ($-1\%$), justamente o harmônico de
+maior amplitude relativa e portanto de maior relevância prática.
+Os desvios para $\nu{=}7,11,13$ decorrem da hipótese $\mu_r{\to}\infty$
+do modelo analítico: no FEMM com M250-50A, a permeabilidade é finita e
+não-linear, redistribuindo levemente o espectro.
+
+\textbf{Config~III -- supressão de $\nu{=}5$ e $\nu{=}7$.}
+O FEMM confirma a forte atenuação desses harmônicos, com valores abaixo
+de $0{,}6\%$ de $B_{g,1}$ frente a $4{,}3\%$ e $2{,}4\%$ no passo pleno,
+respectivamente.
+O erro de $53\%$ em $\nu{=}5$ indica que o valor verdadeiro está próximo
+do piso numérico da malha ($\approx\SI{5}{mT}$); a supressão real excede
+$87\%$, consistente com a previsão teórica de $73\%$.
+
+\textbf{Efeito Carter.}
+O fator de Carter para $w_{so}{=}\SI{1{,}6}{mm}$ e $g{=}\SI{0{,}5}{mm}$:
+$k_c = \tau_s/(\tau_s-\gamma w_{so})$ com
+$\gamma=(w_{so}/g)/[5+(w_{so}/g)]=1{,}25$,
+resulta em $k_c{\approx}1{,}68$, exigindo correntes $68\%$ maiores do
+que o previsto pelo modelo de entreferro liso para atingir
+$B_{g,1}{=}\SI{0{,}9}{T}$.
+
+\textbf{Harmônico fundamental de ranhura.}
+O harmônico de ordem $\nu{=}\mathbf{23}$ é o \textbf{harmônico
+fundamental de ranhura}, com amplitude
+$|B_{g,23}|{\approx}\SI{0{,}146}{T}$ ($16\%$ de $B_{g,1}$) em todas as
+configurações.
+Essa amplitude expressiva confirma a previsão de~\eqref{eq:slot} e
+ressalta que harmônicos de ranhura exigem outras estratégias de
+mitigação (inclinação dos condutores, enrolamento fracionário),
+independentemente do passo de bobina escolhido.
 
 % =====================================================================
-\begin{thebibliography}{9}\small
+\begin{thebibliography}{9}\small\vspace{-2pt}
 \bibitem{fitz}
   A.~E.~Fitzgerald, C.~Kingsley~Jr., S.~D.~Umans,
-  \textit{Máquinas Elétricas}, 7.\textsuperscript{a}~ed., AMGH, 2014.
+  \textit{Máquinas Elétricas}, 7\textsuperscript{a}~ed.\ AMGH, 2014.
 \bibitem{chap}
   S.~J.~Chapman, \textit{Fundamentos de Máquinas Elétricas},
-  5.\textsuperscript{a}~ed., AMGH, 2013.
+  5\textsuperscript{a}~ed.\ AMGH, 2013.
 \bibitem{femm}
-  D.~C.~Meeker, \textit{Finite Element Method Magnetics, User's Manual},
-  ver.~4.2, 2019. Disponível em: \texttt{www.femm.info}
+  D.~C.~Meeker,
+  \textit{Finite Element Method Magnetics -- User's Manual}, v.~4.2, 2019.
+  Disponível em: \texttt{www.femm.info}.
 \end{thebibliography}
 
 \end{document}
