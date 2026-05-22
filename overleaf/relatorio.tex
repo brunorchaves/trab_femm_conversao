@@ -306,16 +306,10 @@ compensando o fator de Carter
 \label{fig:spatial}
 \end{figure}
 
-A Fig.~\ref{fig:spatial} revela as oscilações de alta frequência
-sobrepostas à onda fundamental~-- mais pronunciadas em~(a)~do que em~(b).
-As descontinuidades periódicas (dentes de ranhura) são claramente
-visíveis como ripple de pequena amplitude superposto às ondas de maior
-escala.
-Em~(a), o efeito combinado dos harmônicos $\nu{=}5$ e $\nu{=}7$
-(amplitudes de $38$ e $\SI{21}{mT}$) produz uma distorção perceptível
-na forma de onda, enquanto em~(b) esses harmônicos são tão pequenos
-($\approx\SI{5}{mT}$ cada) que a forma de onda se aproxima de uma
-senoide pura.
+A Fig.~\ref{fig:spatial} revela oscilações de alta frequência sobrepostas
+à onda fundamental: mais pronunciadas em~(a), onde $\nu{=}5$ e $\nu{=}7$
+somam $\approx\SI{60}{mT}$ de distorção; quase ausentes em~(b), onde ambos
+caem a $\approx\SI{5}{mT}$ e a forma de onda se aproxima de uma senoide pura.
 
 % =====================================================================
 \section{Espectro harmônico e harmônicos de ranhura -- item (d)}
@@ -384,42 +378,21 @@ $\nu$ & Analítico & FEMM & Analítico & FEMM & I/II & III\\
 \end{tabular}
 \end{table}
 
-\subsection*{Discussão dos resultados}
-
-\textbf{Harmônicos de campo $\nu{\leq}13$.}
 Para as Configs~I e~II, o FEMM concorda com o analítico dentro de $\pm13\%$
-em todos os harmônicos analisados.
-A melhor concordância é para $\nu{=}5$ ($-1\%$), justamente o harmônico de
-maior amplitude relativa e portanto de maior relevância prática.
-Os desvios para $\nu{=}7,11,13$ decorrem da hipótese $\mu_r{\to}\infty$
-do modelo analítico: no FEMM com M250-50A, a permeabilidade é finita e
-não-linear, redistribuindo levemente o espectro.
+em todos os harmônicos ($-1\%$ para $\nu{=}5$, $-13\%$ para $\nu{=}7$).
+A Config~III confirma a forte atenuação: $\nu{=}5$ e $\nu{=}7$ caem para
+$<0{,}6\%$ de $B_{g,1}$ frente a $4{,}3\%$ e $2{,}4\%$ no passo pleno
+(supressão ${\geq}87\%$, acima dos $73\%$ analíticos).
+Os desvios decorrem da permeabilidade finita do M250-50A e do efeito Carter
+($k_c{\approx}1{,}68$ para $w_{so}{=}\SI{1{,}6}{mm}$, $g{=}\SI{0{,}5}{mm}$),
+que exige correntes $68\%$ maiores do que o modelo de furo liso prevê.
 
-\textbf{Config~III -- supressão de $\nu{=}5$ e $\nu{=}7$.}
-O FEMM confirma a forte atenuação desses harmônicos, com valores abaixo
-de $0{,}6\%$ de $B_{g,1}$ frente a $4{,}3\%$ e $2{,}4\%$ no passo pleno,
-respectivamente.
-O erro de $53\%$ em $\nu{=}5$ indica que o valor verdadeiro está próximo
-do piso numérico da malha ($\approx\SI{5}{mT}$); a supressão real excede
-$87\%$, consistente com a previsão teórica de $73\%$.
-
-\textbf{Efeito Carter.}
-O fator de Carter para $w_{so}{=}\SI{1{,}6}{mm}$ e $g{=}\SI{0{,}5}{mm}$:
-$k_c = \tau_s/(\tau_s-\gamma w_{so})$ com
-$\gamma=(w_{so}/g)/[5+(w_{so}/g)]=1{,}25$,
-resulta em $k_c{\approx}1{,}68$, exigindo correntes $68\%$ maiores do
-que o previsto pelo modelo de entreferro liso para atingir
-$B_{g,1}{=}\SI{0{,}9}{T}$.
-
-\textbf{Harmônico fundamental de ranhura.}
-O harmônico de ordem $\nu{=}\mathbf{23}$ é o \textbf{harmônico
-fundamental de ranhura}, com amplitude
-$|B_{g,23}|{\approx}\SI{0{,}146}{T}$ ($16\%$ de $B_{g,1}$) em todas as
-configurações.
-Essa amplitude expressiva confirma a previsão de~\eqref{eq:slot} e
-ressalta que harmônicos de ranhura exigem outras estratégias de
-mitigação (inclinação dos condutores, enrolamento fracionário),
-independentemente do passo de bobina escolhido.
+O \textbf{harmônico fundamental de ranhura} é $\nu{=}\mathbf{23}$, com
+$|B_{g,23}|{\approx}\SI{0{,}146}{T}\,({=}16\%\ \text{de}\ B_{g,1})$
+idêntico nas três configurações, confirmando a previsão de~\eqref{eq:slot}.
+Harmônicos de ranhura são imunes ao passo de bobina e exigem estratégias
+próprias de mitigação (inclinação dos condutores do rotor, enrolamento
+fracionário).
 
 % =====================================================================
 \begin{thebibliography}{9}\small\vspace{-2pt}
