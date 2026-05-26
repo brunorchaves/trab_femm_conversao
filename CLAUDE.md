@@ -87,25 +87,29 @@ Excitação em t=0: i_A = I_pk, i_B = i_C = −I_pk/2
 
 ---
 
-## Resultados Finais (B_g1 normalizado para 0,9 T)
+## Resultados Finais (B_g1 normalizado para 0,9 T) — Q_r=56
 
 | ν | Config I | Config II | Config III | Analítico I/II | Analítico III |
 |---|---|---|---|---|---|
 | 1 | 0,9000 T | 0,9000 T | 0,9000 T | 0,9000 T | 0,9000 T |
-| 5 | 0,0384 T | 0,0384 T | **0,0048 T** | 0,0386 T | 0,0103 T |
-| 7 | 0,0184 T | 0,0184 T | **0,0048 T** | 0,0212 T | 0,0057 T |
-| 11 | 0,0115 T | 0,0115 T | 0,0115 T | 0,0108 T | 0,0108 T |
-| 13 | 0,0103 T | 0,0103 T | 0,0104 T | 0,0091 T | 0,0091 T |
-| **23** | **0,1462 T** | **0,1462 T** | **0,1458 T** | — | — |
-| **25** | **0,0691 T** | **0,0691 T** | **0,0691 T** | — | — |
+| 5 | 0,0218 T | 0,0218 T | **0,0029 T** | 0,0386 T | 0,0103 T |
+| 7 | 0,0125 T | 0,0125 T | **0,0050 T** | 0,0212 T | 0,0057 T |
+| 11 | 0,0068 T | 0,0068 T | 0,0067 T | 0,0108 T | 0,0108 T |
+| 13 | 0,0060 T | 0,0060 T | 0,0058 T | 0,0091 T | 0,0091 T |
+| **23** | **0,2467 T** | **0,2467 T** | **0,2466 T** | — | — |
+| **25** | **0,1944 T** | **0,1944 T** | **0,1944 T** | — | — |
+| 47 | 0,0260 T | 0,0260 T | 0,0259 T | — | — |
+| 49 | 0,0373 T | 0,0373 T | 0,0373 T | — | — |
 
-**Harmônico fundamental de ranhura:** ν=23 (em todas as configs, ~0,146 T ≈ 16% de B_g1)
+**Harmônicos de ranhura do estator:** ν=23 (~27,4% de B_g1) e ν=25 (~21,6% de B_g1)
+Determinados por ν = k·(Q_s/p)±1 = k·24±1, independente de Q_r.
 
 **Observações importantes:**
-- Config III atenua ν=5 e ν=7 em ~87% vs passo pleno ✓ (analítico previa ~73%)
+- Config III atenua ν=5 em ~87% e ν=7 em ~60% vs passo pleno ✓
 - Config I e II são idênticas eletromagneticamente ✓
 - Harmônicos de ranhura (ν=23,25,47,49) **não se alteram** entre configs ✓
-- Fator de escala aplicado: ×1,677 (Carter + permeabilidade finita do ferro)
+- Fator de escala aplicado: ×2,000 (Carter + permeabilidade finita do ferro)
+- B_g1 bruto (sem normalização): 0,4501 T
 
 ---
 
