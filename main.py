@@ -3,12 +3,19 @@ main.py — Orchestrates the 3-configuration FEMM simulation.
 
 Runs Configs I, II, III sequentially:
   1. Opens FEMM via Wine
-  2. Draws motor geometry
-  3. Assigns materials, circuits, and windings
-  4. Meshes and solves
-  5. Extracts B_g(θ) along air gap arc
-  6. Saves CSV + plots
-  7. Prints harmonic summary
+  2. Draws motor geometry (Q_s=72, Q_r=56)
+  3. Assigns materials (M250-50A), circuits, and windings
+  4. Meshes and solves (magnetostatic, t=0 snapshot)
+  5. Extracts B_r(θ) along air gap arc (720 points)
+  6. Auto-scales to B_g1 = 0.9 T using ke = B_g1_target / B_g1_FEMM
+     NOTE: ke corrects for Carter + small iron drop at the analytical
+     current level (B_teeth ≈ 1 T, iron contribution < 3 A vs 358 A
+     airgap MMF — essentially lightly-saturated linear regime).
+     Running at the actual operating point (B_teeth ≈ 2 T, I ≈ 7× analytical)
+     drives the iron into extreme saturation where saturation harmonics
+     dominate the winding harmonics, making comparison with the
+     analytical formula meaningless.
+  7. Saves CSV + plots harmonic summary
 
 Usage:
   DISPLAY=:1 ~/femm_env/bin/python main.py
@@ -23,25 +30,22 @@ import materials
 import solver
 import analysis
 
-# ── Working directories ───────────────────────────────────────────
-# FEMM/Wine cannot handle non-ASCII chars (Á in "Área") in file paths.
-# .fem and .ans files go to /tmp/femm_work/ (clean ASCII path).
-# CSV and PNG outputs go to the project directory.
 WORK_DIR  = os.path.dirname(os.path.abspath(__file__))
 FEMM_DIR  = '/tmp/femm_work'
 os.makedirs(FEMM_DIR, exist_ok=True)
 
-# ── Calibration constants ─────────────────────────────────────────
 MU0      = 4 * math.pi * 1e-7
 BG1_TGT  = 0.9          # T  — target fundamental flux density
 G_M      = 0.5e-3        # m  — air gap
 P        = 6             # poles
 N_C      = 10            # turns per coil side (per layer)
 
+
 def _Ipk(kw1: float, N_fase: int) -> float:
-    """Peak phase current for target B_g1."""
+    """Peak phase current for target B_g1 (smooth-bore analytical formula)."""
     NI_fase = BG1_TGT * G_M * P * math.pi / (6 * MU0 * kw1)
     return NI_fase / N_fase
+
 
 # Config I  : N_fase = 12 coils × N_C turns = 12*N_C
 # Config II : N_fase = 24 coils × N_C turns = 24*N_C  (two layers)
@@ -93,16 +97,16 @@ def run_one(label: str, cfg_params: dict) -> dict:
     print("  Calculando FFT...")
     fft_result = analysis.compute_fft(bg_data)
 
-    # Auto-scale: multiply all B values so B_g1 = 0.9 T
+    # ke post-hoc scale: valid here because at I_pk_analytical the iron is
+    # lightly loaded (B_teeth ≈ 1 T, µ_r >> 1) — ke ≈ Carter factor only.
     Bg1_actual = fft_result['Bg1']
     kc = BG1_TGT / Bg1_actual if Bg1_actual > 0 else 1.0
     if abs(kc - 1.0) > 0.02:
         print(f"  Fator de escala aplicado: {kc:.4f}  "
               f"(B_g1 bruto={Bg1_actual:.4f} T → normalizado={BG1_TGT} T)")
-        # Rescale bg_data and recompute fft
-        bg_data  = [(th, br * kc, bt * kc) for th, br, bt in bg_data]
+        bg_data    = [(th, br * kc, bt * kc) for th, br, bt in bg_data]
         fft_result = analysis.compute_fft(bg_data)
-        solver.save_Bg(bg_data, csv_file)  # overwrite with scaled data
+        solver.save_Bg(bg_data, csv_file)
 
     analysis.print_summary(label, fft_result)
 
@@ -128,7 +132,6 @@ def main():
     for label, params in CONFIGS.items():
         all_results[label] = run_one(label, params)
 
-    # ── Comparison plot ───────────────────────────────────────────
     analysis.plot_comparison(all_results,
         os.path.join(WORK_DIR,  'Bg_comparison.png'))
 
