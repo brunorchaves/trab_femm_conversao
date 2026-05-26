@@ -66,7 +66,7 @@ FEMM path: `~/.wine/drive_c/femm42/bin/femm.exe`
 | Polos P | 6 |
 | Fases m | 3 |
 | Ranhuras do estator Q_s | 72 |
-| Ranhuras do rotor Q_r | 28 |
+| Ranhuras do rotor Q_r | 56 |
 | Entreferro g | 0,50 mm |
 | Tensão terminal | 127 V_rms / 60 Hz |
 | Aço | M250-50A (APERAM E105) |
@@ -123,10 +123,11 @@ Excitação em t=0: i_A = I_pk, i_B = i_C = −I_pk/2
 | R_bar_bot | 37,6 | fundo das barras do rotor |
 | R_ri | 30,0 | eixo |
 
-Linhas radiais: 72×2 para ranhuras do estator, 28×2 para barras do rotor.
+Linhas radiais: 72×2 para ranhuras do estator, 56×2 para barras do rotor.
 Largura angular das ranhuras: delta_s = arcsin(w_so/2 / R_si) = arcsin(0,8/57,5) ≈ 0,796°
+Largura angular das barras: delta_r = arcsin(w_r_top/2 / R_re) = arcsin(1,375/57) ≈ 1,38°
 
-**Regiões rotuladas:** 205 block labels (1 ar externo + 1 coroa + 72 dentes + 72 ranhuras + 1 entreferro + 28 barras + 28 ferro rotor + 1 coroa rotor + 1 eixo)
+**Regiões rotuladas:** ~261 block labels (1 ar externo + 1 coroa + 72 dentes + 72 ranhuras + 1 entreferro + 56 barras + 56 ferro rotor + 1 coroa rotor + 1 eixo)
 
 ---
 

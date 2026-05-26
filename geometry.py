@@ -22,8 +22,8 @@ GEO = dict(
     R_re      = 57.0,
     R_bar_bot = 37.6,
     R_ri      = 30.0,
-    Q_r       = 28,
-    w_r_top   = 5.5,
+    Q_r       = 56,
+    w_r_top   = 2.75,
     # misc
     R_ag      = 57.25,
     R_bound   = 110.0,

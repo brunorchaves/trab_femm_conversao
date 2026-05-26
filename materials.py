@@ -66,7 +66,7 @@ def assign_regions():
     # Stator iron: yoke + all teeth + tooth tips = ONE connected region.
     # The single 'stator_yoke' label above covers everything.
 
-    # 28 rotor bars + 28 rotor inter-bar iron regions
+    # Q_r rotor bars + Q_r rotor inter-bar iron regions
     for n in range(GEO['Q_r']):
         _label(*rotor_bar_label_pos(n),   'Aluminio')
         _label(*rotor_iron_label_pos(n),  'M250-50A')
