@@ -376,9 +376,19 @@ Para as Configs~I e~II, o FEMM fica consistentemente abaixo do analítico
 A Config~III confirma a forte atenuação: $\nu{=}5$ cai para $0{,}32\%$ de
 $B_{g,1}$ (supressão de $87\%$, acima dos $73\%$ analíticos) e $\nu{=}7$ cai
 para $0{,}56\%$ (supressão de $60\%$ frente a $1{,}39\%$ no passo pleno).
-Os desvios sistemáticos decorrem da saturação do M250-50A, do efeito Carter
-e do perfil real da ranhura (fundo arredondado R3,885~mm, $Q_r{=}56$), que juntos
-exigem fator de escala $k_e{\approx}2{,}00$ --- correntes $100\%$ acima do modelo de furo liso.
+
+Para isolar a origem dos desvios, repetiu-se a Config~I substituindo o M250-50A por
+ferro \emph{linear} de $\mu_r{=}5000$ (sem saturação).
+Os erros caíram para $+1\%$ ($\nu{=}5$), $+2\%$ ($\nu{=}7$), $+6\%$ ($\nu{=}11$) e
+$+12\%$ ($\nu{=}13$), com $k_e^{\text{lin}}{=}1{,}884$ (puro fator de Carter).
+Isso demonstra que \textbf{a saturação do M250-50A é responsável por} ${\approx}35\%$
+\textbf{dos desvios}, enquanto o efeito Carter residual por harmônico
+($\lambda_\nu = \lambda_1/\nu$ $\Rightarrow$ abertura de ranhura relativamente maior)
+explica os $1{-}12\%$ restantes.
+O $k_e{\approx}2{,}00$ do modelo com ferro real decompõe-se em:
+Carter puro ($k_e^{\text{lin}}{=}1{,}884$) mais $6\%$ de queda no ferro
+($B_{\text{dente}}{\approx}\SI{1}{T}$, $H{\approx}\SI{150}{A/m}$, queda ${\approx}\SI{3}{A}$ vs
+$\SI{358}{A}$ no entreferro).
 
 O \textbf{harmônico fundamental de ranhura} é $\nu{=}\mathbf{23}$, com
 $|B_{g,23}|{\approx}\SI{0{,}247}{T}\,({=}27\%\ \text{de}\ B_{g,1})$,
