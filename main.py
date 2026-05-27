@@ -3,7 +3,7 @@ main.py — Orchestrates the 3-configuration FEMM simulation.
 
 Runs Configs I, II, III sequentially:
   1. Opens FEMM via Wine
-  2. Draws motor geometry (Q_s=72, Q_r=56)
+  2. Draws motor geometry (Q_s=72, Q_r=52)
   3. Assigns materials (M250-50A), circuits, and windings
   4. Meshes and solves (magnetostatic, t=0 snapshot)
   5. Extracts B_r(θ) along air gap arc (720 points)

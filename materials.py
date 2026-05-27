@@ -5,7 +5,7 @@ materials.py — Material definitions, circuits, and block-label assignment.
 import femm
 from geometry import (GEO, region_label_pos,
                       stator_slot_label_pos,
-                      rotor_bar_label_pos, rotor_iron_label_pos)
+                      rotor_bar_label_pos)
 from winding import slot_layers
 
 _BH_M250 = [
@@ -66,10 +66,9 @@ def assign_regions():
     # Stator iron: yoke + all teeth + tooth tips = ONE connected region.
     # The single 'stator_yoke' label above covers everything.
 
-    # Q_r rotor bars + Q_r rotor inter-bar iron regions
+    # Q_r rotor bars (inter-bar iron is ONE connected region via rotor_yoke label above)
     for n in range(GEO['Q_r']):
-        _label(*rotor_bar_label_pos(n),   'Aluminio')
-        _label(*rotor_iron_label_pos(n),  'M250-50A')
+        _label(*rotor_bar_label_pos(n), 'Aluminio')
 
 
 def assign_windings(config: int, N_c: int, I_pk: float = 1.0):
