@@ -30,9 +30,11 @@ import materials
 import solver
 import analysis
 
-WORK_DIR  = os.path.dirname(os.path.abspath(__file__))
-FEMM_DIR  = '/tmp/femm_work'
+WORK_DIR    = os.path.dirname(os.path.abspath(__file__))
+RESULTS_DIR = os.path.join(WORK_DIR, 'results')
+FEMM_DIR    = '/tmp/femm_work'
 os.makedirs(FEMM_DIR, exist_ok=True)
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
 MU0      = 4 * math.pi * 1e-7
 BG1_TGT  = 0.9          # T  — target fundamental flux density
@@ -69,8 +71,8 @@ def run_one(label: str, cfg_params: dict) -> dict:
     print(f"Config {label}  |  N_c={N_C}  I_pk={I_pk:.3f} A")
     print(f"{'='*55}")
 
-    femfile  = os.path.join(FEMM_DIR,  f'motor_config_{label}.fem')
-    csv_file = os.path.join(WORK_DIR,  f'Bg_config_{label}.csv')
+    femfile  = os.path.join(FEMM_DIR,    f'motor_config_{label}.fem')
+    csv_file = os.path.join(RESULTS_DIR, f'Bg_config_{label}.csv')
 
     # ── Build model ───────────────────────────────────────────────
     femm.newdocument(0)
@@ -111,9 +113,9 @@ def run_one(label: str, cfg_params: dict) -> dict:
     analysis.print_summary(label, fft_result)
 
     analysis.plot_Bg_spatial(bg_data, label,
-        os.path.join(WORK_DIR,  f'Bg_spatial_{label}.png'))
+        os.path.join(RESULTS_DIR, f'Bg_spatial_{label}.png'))
     analysis.plot_spectrum(fft_result, label,
-        os.path.join(WORK_DIR,  f'Bg_spectrum_{label}.png'))
+        os.path.join(RESULTS_DIR, f'Bg_spectrum_{label}.png'))
 
     slot_h = analysis.find_slot_harmonics(fft_result)
     if slot_h:
@@ -133,7 +135,7 @@ def main():
         all_results[label] = run_one(label, params)
 
     analysis.plot_comparison(all_results,
-        os.path.join(WORK_DIR,  'Bg_comparison.png'))
+        os.path.join(RESULTS_DIR, 'Bg_comparison.png'))
 
     femm.closefemm()
     print("\nConcluído. Arquivos gerados em:", WORK_DIR)

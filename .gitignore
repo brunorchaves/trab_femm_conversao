@@ -3,10 +3,12 @@ __pycache__/
 *.pyo
 .env
 
-# FEMM: ignorar soluções (grandes, regeneráveis); rastrear modelos .fem do repo
+# FEMM: soluções (grandes, regeneráveis — ficam em /tmp/femm_work/)
 *.ans
-check_geom.fem
-# Os arquivos motor_config_*.fem são rastreados (não ignorados)
+/tmp/femm_work/
+
+# Arquivo temporário de verificação de geometria (gerado por check_geometry.py)
+tools/check_geom.fem
 
 # macOS
 .DS_Store
