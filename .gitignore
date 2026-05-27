@@ -3,9 +3,10 @@ __pycache__/
 *.pyo
 .env
 
-# FEMM working files (generated in /tmp/femm_work/)
-*.fem
+# FEMM: ignorar soluções (grandes, regeneráveis); rastrear modelos .fem do repo
 *.ans
+check_geom.fem
+# Os arquivos motor_config_*.fem são rastreados (não ignorados)
 
 # macOS
 .DS_Store
