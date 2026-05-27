@@ -66,7 +66,7 @@ FEMM path: `~/.wine/drive_c/femm42/bin/femm.exe`
 | Polos P | 6 |
 | Fases m | 3 |
 | Ranhuras do estator Q_s | 72 |
-| Ranhuras do rotor Q_r | 56 |
+| Ranhuras do rotor Q_r | 52 |
 | Entreferro g | 0,50 mm |
 | Tensão terminal | 127 V_rms / 60 Hz |
 | Aço | M250-50A (APERAM E105) |
@@ -87,29 +87,33 @@ Excitação em t=0: i_A = I_pk, i_B = i_C = −I_pk/2
 
 ---
 
-## Resultados Finais (B_g1 normalizado para 0,9 T) — Q_r=56
+## Resultados Finais (B_g1 normalizado para 0,9 T) — Q_r=52
 
 | ν | Config I | Config II | Config III | Analítico I/II | Analítico III |
 |---|---|---|---|---|---|
 | 1 | 0,9000 T | 0,9000 T | 0,9000 T | 0,9000 T | 0,9000 T |
-| 5 | 0,0218 T | 0,0218 T | **0,0029 T** | 0,0386 T | 0,0103 T |
-| 7 | 0,0125 T | 0,0125 T | **0,0050 T** | 0,0212 T | 0,0057 T |
-| 11 | 0,0068 T | 0,0068 T | 0,0067 T | 0,0108 T | 0,0108 T |
-| 13 | 0,0060 T | 0,0060 T | 0,0058 T | 0,0091 T | 0,0091 T |
-| **23** | **0,2467 T** | **0,2467 T** | **0,2466 T** | — | — |
-| **25** | **0,1944 T** | **0,1944 T** | **0,1944 T** | — | — |
-| 47 | 0,0260 T | 0,0260 T | 0,0259 T | — | — |
-| 49 | 0,0373 T | 0,0373 T | 0,0373 T | — | — |
+| 5 | 0,0179 T | 0,0179 T | **0,0036 T** | 0,0386 T | 0,0103 T |
+| 7 | 0,0130 T | 0,0130 T | **0,0031 T** | 0,0212 T | 0,0057 T |
+| 11 | 0,0061 T | 0,0061 T | 0,0058 T | 0,0108 T | 0,0108 T |
+| 13 | 0,0054 T | 0,0054 T | 0,0051 T | 0,0091 T | 0,0091 T |
+| **23** | **0,2706 T** | **0,2706 T** | **0,2705 T** | — | — |
+| **25** | **0,2186 T** | **0,2186 T** | **0,2187 T** | — | — |
+| 47 | 0,0246 T | 0,0246 T | 0,0246 T | — | — |
+| 49 | 0,0356 T | 0,0356 T | 0,0355 T | — | — |
+| 71 | 0,0510 T | 0,0510 T | 0,0511 T | — | — |
+| 73 | 0,0462 T | 0,0462 T | 0,0462 T | — | — |
 
-**Harmônicos de ranhura do estator:** ν=23 (~27,4% de B_g1) e ν=25 (~21,6% de B_g1)
+**Harmônicos de ranhura do estator:** ν=23 (30,1% de B_g1) e ν=25 (24,3% de B_g1)
 Determinados por ν = k·(Q_s/p)±1 = k·24±1, independente de Q_r.
+Família M=3: ν=71 (5,7%) e ν=73 (5,1%) também visíveis.
 
 **Observações importantes:**
-- Config III atenua ν=5 em ~87% e ν=7 em ~60% vs passo pleno ✓
+- Config III atenua ν=5 em ~80% e ν=7 em ~76% vs passo pleno ✓
 - Config I e II são idênticas eletromagneticamente ✓
-- Harmônicos de ranhura (ν=23,25,47,49) **não se alteram** entre configs ✓
-- Fator de escala aplicado: ×2,000 (Carter + permeabilidade finita do ferro)
-- B_g1 bruto (sem normalização): 0,4501 T
+- Harmônicos de ranhura (ν=23,25,47,49,71,73) **não se alteram** entre configs ✓
+- Fator de escala aplicado: ×1,732 (Carter + permeabilidade finita do ferro)
+- B_g1 bruto (sem normalização): 0,5195 T
+- ke caiu de 2,00→1,73 em relação a Q_r=56 (abertura de ranhura do rotor menor)
 
 ---
 
