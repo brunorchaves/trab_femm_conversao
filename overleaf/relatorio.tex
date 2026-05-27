@@ -246,8 +246,8 @@ da simulação em FEMM.
 O modelo de elementos finitos foi construído no FEMM~4.2 em geometria 2D
 planar ($L{=}\SI{140}{mm}$), seção transversal completa com três círculos
 concêntricos ($r$: 110,0; 91,4; 21,0~mm) mais superfícies de ranhura definidas
-por arcos e linhas radiais. O \textbf{estator} possui $Q_s{=}72$ ranhuras
-semi-fechadas (Fig.~\ref{fig:slot}): pescoço retangular
+por arcos e linhas radiais (Figs.~\ref{fig:motor}--\ref{fig:slot}).
+O \textbf{estator} possui $Q_s{=}72$ ranhuras semi-fechadas: pescoço retangular
 ($w_{so}{=}\SI{2{,}8}{mm}$, $h_n{=}\SI{0{,}6}{mm}$), corpo trapezoidal até
 $w_b{=}\SI{5{,}444}{mm}$ e fundo arredondado com $R{=}\SI{3{,}885}{mm}$.
 O \textbf{rotor} possui $Q_r{=}52$ barras de alumínio em ranhuras
@@ -259,10 +259,32 @@ profundidade total $h_r{=}\SI{11{,}85}{mm}$; furo central Ø42~H7
 
 \begin{figure}[h!]
 \vspace{-2pt}\centering
-\includegraphics[width=0.72\linewidth]{slot_geometry.png}
-\caption{Geometria das ranhuras do estator implementada no FEMM\@:
-         seção transversal completa ($Q_s{=}72$) e detalhe do perfil
-         semifechado com cotas (escala ampliada).}
+\includegraphics[width=0.82\linewidth]{motor_geometry_new.png}
+\caption{Seção transversal completa do motor implementado no FEMM\@:
+         estator ($Q_s{=}72$ ranhuras semi-fechadas, $R_{se}{=}\SI{91{,}4}{mm}$),
+         entreferro ($g{=}\SI{0{,}5}{mm}$) e rotor ($Q_r{=}52$ barras de alumínio,
+         furo Ø42~H7 com dois rasgos de chaveta a $180°$).}
+\label{fig:motor}
+\end{figure}
+\vspace{-1pt}
+
+\begin{figure}[h!]
+\vspace{-1pt}
+\centering
+\begin{minipage}[t]{0.495\textwidth}
+  \centering\small
+  \includegraphics[width=\linewidth]{stator_geometry_new.png}
+  \caption*{(a) Estator -- $Q_s{=}72$ ranhuras semi-fechadas trapezoidais}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.495\textwidth}
+  \centering\small
+  \includegraphics[width=\linewidth]{rotor_geometry_new.png}
+  \caption*{(b) Rotor -- $Q_r{=}52$ barras e furo Ø42~H7 com chavetas}
+\end{minipage}
+\caption{Detalhes das geometrias de estator e rotor.
+         Esquerda: seção completa + detalhe do perfil de ranhura semifechada
+         ($w_{so}{=}\SI{2{,}8}{mm}$, $h_s{=}\SI{18{,}5}{mm}$).
+         Direita: seção completa do rotor + detalhe dos quatro rasgos de chaveta do eixo.}
 \label{fig:slot}
 \end{figure}
 \vspace{-3pt}
