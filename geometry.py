@@ -104,13 +104,76 @@ def _full_circle(R):
     femm.mi_drawarc(-R, 0.0,  R, 0.0, 180.0, 1)
 
 
+# ── Shaft bore with keyways (Ø42 H7 + 2 × 10 H7 keyways at ±90°, R1 fillets) ─
+_KW_HW    = 5.0    # keyway half-width (10 mm total)
+_KW_R_OUT = 25.17  # keyway outer radius from shaft centre
+_KW_RFILL = 1.0    # R1 corner fillet radius
+
+# y_C: x-coordinate of the fillet centre (perpendicular to the radial keyway axis)
+# derived from: (R_ri + r_fill)^2 = (hw + r_fill)^2 + y_C^2
+_y_C  = math.sqrt((_g['R_ri'] + _KW_RFILL)**2 - (_KW_HW + _KW_RFILL)**2)
+_s_kw = _g['R_ri'] / (_g['R_ri'] + _KW_RFILL)  # projection factor onto bore circle
+
+# Tangent points where bore circle meets the fillet arcs
+_tb_TR = ( _s_kw * (_KW_HW + _KW_RFILL),  _s_kw * _y_C)
+_tb_TL = (-_s_kw * (_KW_HW + _KW_RFILL),  _s_kw * _y_C)
+_tb_BL = (-_s_kw * (_KW_HW + _KW_RFILL), -_s_kw * _y_C)
+_tb_BR = ( _s_kw * (_KW_HW + _KW_RFILL), -_s_kw * _y_C)
+
+# Tangent points where keyway walls meet the fillet arcs
+_tk_TR = ( _KW_HW,  _y_C)
+_tk_TL = (-_KW_HW,  _y_C)
+_tk_BL = (-_KW_HW, -_y_C)
+_tk_BR = ( _KW_HW, -_y_C)
+
+# Arc angle subtended by each fillet and each bore arc segment
+_ANG_KW = math.degrees(math.atan2(_y_C, _KW_HW + _KW_RFILL))  # ≈ 74.22°
+
+
 # ── Drawing functions ─────────────────────────────────────────────────────────
 
+def draw_shaft_bore_with_keyways():
+    """Ø42 H7 bore + 2 × 10 H7 keyways at ±90° with R1 fillets.
+
+    The bore boundary is split into 3 CCW arcs separated by the keyway slots.
+    Each keyway corner has a CW fillet of radius 1 mm, drawn as CCW arcs by
+    reversing the endpoint order (FEMM always draws CCW given p1→p2).
+    """
+    R  = _g['R_ri']       # 21.0 mm
+    hw = _KW_HW           # 5.0 mm
+    Rk = _KW_R_OUT        # 25.17 mm
+    yC = _y_C             # ≈ 21.166 mm
+    a  = _ANG_KW          # ≈ 74.22°
+
+    # ── Bore arc 1: (R,0) → tb_TR  (74.22° CCW)
+    femm.mi_drawarc(R, 0.0, *_tb_TR, a, 1)
+
+    # ── Keyway +Y (at 90°): CW fillets drawn as CCW by swapping end-points
+    femm.mi_drawarc(*_tk_TR, *_tb_TR, a, 1)   # fillet TR: CCW tk→tb ≡ CW bore→kw
+    femm.mi_drawline( hw,  yC,  hw, Rk)
+    femm.mi_drawline( hw, Rk,  -hw, Rk)
+    femm.mi_drawline(-hw, Rk,  -hw, yC)
+    femm.mi_drawarc(*_tb_TL, *_tk_TL, a, 1)   # fillet TL: CCW tb→tk ≡ CW kw→bore
+
+    # ── Bore arc 2: tb_TL → tb_BL  (148.44° CCW, crosses 180°)
+    femm.mi_drawarc(*_tb_TL, *_tb_BL, 2.0 * a, 1)
+
+    # ── Keyway -Y (at 270°)
+    femm.mi_drawarc(*_tk_BL, *_tb_BL, a, 1)   # fillet BL: CCW tk→tb ≡ CW bore→kw
+    femm.mi_drawline(-hw, -yC, -hw, -Rk)
+    femm.mi_drawline(-hw, -Rk,  hw, -Rk)
+    femm.mi_drawline( hw, -Rk,  hw, -yC)
+    femm.mi_drawarc(*_tb_BR, *_tk_BR, a, 1)   # fillet BR: CCW tb→tk ≡ CW kw→bore
+
+    # ── Bore arc 3: tb_BR → (R,0)  (74.22° CCW)
+    femm.mi_drawarc(*_tb_BR, R, 0.0, a, 1)
+
+
 def draw_circles():
-    """Boundary, stator outer, and shaft-bore circles only.
-    Stator inner and rotor outer surfaces are formed by slot arcs."""
-    for R in (GEO['R_bound'], GEO['R_se'], GEO['R_ri']):
+    """Boundary and stator outer circles; shaft bore drawn with keyways."""
+    for R in (GEO['R_bound'], GEO['R_se']):
         _full_circle(R)
+    draw_shaft_bore_with_keyways()
 
 
 def draw_stator_slots():
