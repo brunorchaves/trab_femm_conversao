@@ -43,6 +43,11 @@ R_re   = 57.0
 R_ri   = 21.0      # shaft bore Ø42 H7
 Q_r    = 52
 
+# Shaft keyway geometry (Ø42 H7 + 2 × 10 H7 keyways @ 180°)
+_KW_HW      = 5.00    # half-width of keyway (10 mm total)
+_KW_R_OUTER = 25.17   # radial extent of keyway (50.34/2 mm)
+_KW_FILLET  = 1.00    # corner fillet radius R1
+
 _SCALE = 28.0 / 52.0
 _W_OPEN_R = 0.600 * _SCALE      # 0.3231 mm
 _W_TOP_R  = 6.198 * _SCALE      # 3.3374 mm
@@ -137,6 +142,54 @@ def rotor_bar_poly(n, n_arc=80):
     xs = np.concatenate([ox, [P1[0], P2[0], P3[0]], bx, [P5[0], P6[0]]])
     ys = np.concatenate([oy, [P1[1], P2[1], P3[1]], by, [P5[1], P6[1]]])
     return xs, ys
+
+
+def shaft_hole_with_keyways(n_arc=240, n_fillet=20):
+    """CCW polygon of the shaft bore + 2 keyways @ 0° and 180°, with R1 fillets."""
+    R_bore = R_ri
+    hw     = _KW_HW
+    R_kw   = _KW_R_OUTER
+    r_fill = _KW_FILLET
+    y_C = np.sqrt((R_bore + r_fill) ** 2 - (hw + r_fill) ** 2)
+    s   = R_bore / (R_bore + r_fill)
+
+    tb_TR = ( s * (hw + r_fill),  s * y_C)
+    tb_TL = (-s * (hw + r_fill),  s * y_C)
+    tb_BR = ( s * (hw + r_fill), -s * y_C)
+    tb_BL = (-s * (hw + r_fill), -s * y_C)
+    tk_TR = ( hw,  y_C);  tk_TL = (-hw,  y_C)
+    tk_BR = ( hw, -y_C);  tk_BL = (-hw, -y_C)
+    C_TR  = ( hw + r_fill,  y_C);  C_TL = (-(hw + r_fill),  y_C)
+    C_BR  = ( hw + r_fill, -y_C);  C_BL = (-(hw + r_fill), -y_C)
+
+    ang_TR = np.arctan2(tb_TR[1], tb_TR[0])
+    ang_TL = np.arctan2(tb_TL[1], tb_TL[0])
+    ang_BR = np.arctan2(tb_BR[1], tb_BR[0])
+    ang_BL = np.arctan2(tb_BL[1], tb_BL[0])
+
+    def fillet(C, p0, p1, r, n):
+        a0 = np.arctan2(p0[1] - C[1], p0[0] - C[0])
+        a1 = np.arctan2(p1[1] - C[1], p1[0] - C[0])
+        if a0 < a1:
+            a0 += 2 * np.pi   # CW direction
+        return [(C[0] + r * np.cos(t), C[1] + r * np.sin(t))
+                for t in np.linspace(a0, a1, n)]
+
+    pts = []
+    for t in np.linspace(0, ang_TR, n_arc // 4):
+        pts.append((R_bore * np.cos(t), R_bore * np.sin(t)))
+    pts += fillet(C_TR, tb_TR, tk_TR, r_fill, n_fillet)
+    pts.append(( hw,  R_kw)); pts.append((-hw,  R_kw))
+    pts += fillet(C_TL, tk_TL, tb_TL, r_fill, n_fillet)
+    ang_BL_ccw = ang_BL + 2 * np.pi if ang_BL < ang_TL else ang_BL
+    for t in np.linspace(ang_TL, ang_BL_ccw, n_arc // 2):
+        pts.append((R_bore * np.cos(t), R_bore * np.sin(t)))
+    pts += fillet(C_BL, tb_BL, tk_BL, r_fill, n_fillet)
+    pts.append((-hw, -R_kw)); pts.append(( hw, -R_kw))
+    pts += fillet(C_BR, tk_BR, tb_BR, r_fill, n_fillet)
+    for t in np.linspace(ang_BR, 0, n_arc // 4):
+        pts.append((R_bore * np.cos(t), R_bore * np.sin(t)))
+    return pts
 
 
 # ── Annotation helper ─────────────────────────────────────────────────────────
@@ -272,8 +325,9 @@ ax.set_aspect('equal'); ax.set_facecolor(BG); ax.axis('off')
 
 # Rotor iron disc
 ax.add_patch(plt.Circle((0, 0), R_re, fc=IRON, ec=EDG, lw=1.1, zorder=1))
-# Shaft bore
-ax.add_patch(plt.Circle((0, 0), R_ri, fc=SHAFT, ec=EDG, lw=0.9, zorder=3))
+# Shaft with keyways (SHAFT-colored polygon: bore Ø42 + 2 × 10 keyways)
+_shaft_pts = shaft_hole_with_keyways()
+ax.add_patch(plt.Polygon(_shaft_pts, closed=True, fc=SHAFT, ec=EDG, lw=0.8, zorder=4))
 
 # 52 bars
 for n in range(Q_r):
@@ -433,8 +487,9 @@ ax.add_patch(plt.Circle((0, 0), R_se,  fc=IRON, ec=EDG, lw=1.1, zorder=1))
 ax.add_patch(plt.Circle((0, 0), R_si,  fc=AIR,  ec='none',      zorder=2))
 # Rotor iron
 ax.add_patch(plt.Circle((0, 0), R_re,  fc=IRON, ec='none',      zorder=2))
-# Shaft
-ax.add_patch(plt.Circle((0, 0), R_ri,  fc=SHAFT, ec=EDG, lw=0.9, zorder=5))
+# Shaft with keyways
+ax.add_patch(plt.Polygon(shaft_hole_with_keyways(), closed=True,
+                          fc=SHAFT, ec=EDG, lw=0.7, zorder=5))
 
 # Stator slots
 for i in range(Q_s):
