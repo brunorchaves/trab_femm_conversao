@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.27)  28 MAY 2026 16:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.27)  28 MAY 2026 16:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -551,56 +551,63 @@ T1/ptm/m/n/12 ).
 dist/fonts/enc/dvips/base/8r.enc}
 
 ] [2]
-<motor_composite_figure.png, id=18, 985.6825pt x 1101.3145pt>
-File: motor_composite_figure.png Graphic file (type png)
-<use motor_composite_figure.png>
-Package pdftex.def Info: motor_composite_figure.png  used on input line 294.
-(pdftex.def)             Requested size: 483.69687pt x 540.43864pt.
+<panel_a_field.png, id=18, 406.318pt x 403.909pt>
+File: panel_a_field.png Graphic file (type png)
+<use panel_a_field.png>
+Package pdftex.def Info: panel_a_field.png  used on input line 295.
+(pdftex.def)             Requested size: 290.22107pt x 288.50307pt.
+<panel_b_stator.png, id=20, 480.5955pt x 511.1095pt>
+File: panel_b_stator.png Graphic file (type png)
+<use panel_b_stator.png>
+Package pdftex.def Info: panel_b_stator.png  used on input line 299.
+(pdftex.def)             Requested size: 118.50705pt x 126.0301pt.
+<panel_c_rotor.png, id=21, 373.7965pt x 511.1095pt>
+File: panel_c_rotor.png Graphic file (type png)
+<use panel_c_rotor.png>
+Package pdftex.def Info: panel_c_rotor.png  used on input line 303.
+(pdftex.def)             Requested size: 142.20992pt x 194.4576pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Bg_spatial_I.png, id=20, 722.7pt x 252.945pt>
+<Bg_spatial_I.png, id=22, 722.7pt x 252.945pt>
 File: Bg_spatial_I.png Graphic file (type png)
 <use Bg_spatial_I.png>
-Package pdftex.def Info: Bg_spatial_I.png  used on input line 311.
+Package pdftex.def Info: Bg_spatial_I.png  used on input line 321.
 (pdftex.def)             Requested size: 232.17242pt x 81.26054pt.
-<Bg_spatial_III.png, id=21, 722.7pt x 252.945pt>
+<Bg_spatial_III.png, id=23, 722.7pt x 252.945pt>
 File: Bg_spatial_III.png Graphic file (type png)
 <use Bg_spatial_III.png>
-Package pdftex.def Info: Bg_spatial_III.png  used on input line 312.
+Package pdftex.def Info: Bg_spatial_III.png  used on input line 322.
 (pdftex.def)             Requested size: 232.17242pt x 81.26054pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Bg_spectrum_I.png, id=22, 867.24pt x 289.08pt>
+<Bg_spectrum_I.png, id=24, 867.24pt x 289.08pt>
 File: Bg_spectrum_I.png Graphic file (type png)
 <use Bg_spectrum_I.png>
-Package pdftex.def Info: Bg_spectrum_I.png  used on input line 326.
+Package pdftex.def Info: Bg_spectrum_I.png  used on input line 336.
 (pdftex.def)             Requested size: 232.17242pt x 77.39099pt.
-<Bg_spectrum_III.png, id=23, 867.24pt x 289.08pt>
+<Bg_spectrum_III.png, id=25, 867.24pt x 289.08pt>
 File: Bg_spectrum_III.png Graphic file (type png)
 <use Bg_spectrum_III.png>
-Package pdftex.def Info: Bg_spectrum_III.png  used on input line 327.
+Package pdftex.def Info: Bg_spectrum_III.png  used on input line 337.
 (pdftex.def)             Requested size: 232.17242pt x 77.39099pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 3
-60.
+70.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[3]
-Overfull \vbox (2.26334pt too high) has occurred while \output is active []
-
-
-[4 <./motor_composite_figure.png> <./Bg_spatial_I.png> <./Bg_spatial_III.png>]
+[3] [4 <./panel_a_field.png> <./panel_b_stator.png> <./panel_c_rotor.png> <./Bg
+_spatial_I.png> <./Bg_spatial_III.png>]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
-46.
+56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
@@ -611,10 +618,10 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 11765 strings out of 476089
- 248714 string characters out of 5793232
+ 11781 strings out of 476089
+ 249052 string characters out of 5793232
  1947975 words of memory out of 5000000
- 33616 multiletter control sequences out of 15000+600000
+ 33632 multiletter control sequences out of 15000+600000
  614426 words of font info for 136 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
  73i,13n,80p,1198b,875s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -627,10 +634,10 @@ mf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on relatorio.pdf (5 pages, 2502738 bytes).
+Output written on relatorio.pdf (5 pages, 1175782 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
+ 92 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

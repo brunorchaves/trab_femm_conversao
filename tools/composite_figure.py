@@ -330,12 +330,35 @@ leg_r = [mpatches.Patch(fc=IRON, ec=EDG,      label='Ferro (M250-50A)'),
 ax_c.legend(handles=leg_r, loc='lower right', fontsize=7.5, framealpha=0.9)
 
 
-# ── Título geral e salvar ─────────────────────────────────────────────────────
+# ── Salvar painéis separados + figura composta ────────────────────────────────
+
+# Painel (a) — density plot separado
+fig_a, ax_fa = plt.subplots(1, 1, figsize=(7, 7), facecolor=BG)
+ax_fa.axis('off')
+if os.path.exists(img_path):
+    img2 = np.array(Image.open(img_path))
+    ax_fa.imshow(img2, aspect='auto', interpolation='lanczos')
+fig_a.savefig(os.path.join(_RESULTS, 'panel_a_field.png'), dpi=180, bbox_inches='tight', facecolor=BG)
+plt.close(fig_a)
+print(f'Salvo: {os.path.join(_RESULTS, "panel_a_field.png")}')
+
+# Painel (b) — estator separado (reusa ax_b: salvar só a região)
+extent_b = ax_b.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+out_b = os.path.join(_RESULTS, 'panel_b_stator.png')
+fig.savefig(out_b, dpi=180, bbox_inches=extent_b.expanded(1.02, 1.05), facecolor=BG)
+print(f'Salvo: {out_b}')
+
+# Painel (c) — rotor separado
+extent_c = ax_c.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+out_c = os.path.join(_RESULTS, 'panel_c_rotor.png')
+fig.savefig(out_c, dpi=180, bbox_inches=extent_c.expanded(1.02, 1.05), facecolor=BG)
+print(f'Salvo: {out_c}')
+
+# Figura composta (mantém para referência)
 fig.suptitle(
     'Motor de Indução Trifásico — $Q_s$=36 / $Q_r$=28 / $p$=3  |  '
     'Campo FEM e geometria das ranhuras',
     fontsize=12, color='#111', y=0.97)
-
 out = os.path.join(_RESULTS, 'motor_composite_figure.png')
 fig.savefig(out, dpi=180, bbox_inches='tight', facecolor=BG)
 plt.close()
