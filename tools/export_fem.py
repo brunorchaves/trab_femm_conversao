@@ -26,9 +26,9 @@ P       = 6
 N_C     = 10
 
 CONFIGS = {
-    'I':   {'config': 1, 'kw1': 0.9577, 'N_fase': 12 * N_C},
-    'II':  {'config': 2, 'kw1': 0.9577, 'N_fase': 24 * N_C},
-    'III': {'config': 3, 'kw1': 0.9250, 'N_fase': 24 * N_C},
+    'I':   {'config': 1, 'kw1': 0.9659, 'N_fase':  6 * N_C},
+    'II':  {'config': 2, 'kw1': 0.9659, 'N_fase': 12 * N_C},
+    'III': {'config': 3, 'kw1': 0.9330, 'N_fase': 12 * N_C},
 }
 
 femm.openfemm(winepath='/usr/bin/wine',

@@ -3,6 +3,8 @@ geometry.py — Motor cross-section with semi-closed stator and rotor slots.
 
 Strategy: define one base slot on +X axis, rotate to each position.
 No bore circle drawn — bore surface = tooth-face arcs + slot-opening arcs.
+
+Machine: Q_s=36, Q_r=28, P=6, g=0.5mm.
 """
 
 import math
@@ -11,72 +13,97 @@ import femm
 GEO = dict(
     R_se      = 91.4,   # stator outer radius
     R_si      = 57.5,   # stator bore (reference; no circle drawn)
-    Q_s       = 72,
-    # stator slot geometry
-    w_open    = 2.8,    # slot opening width  (mm)
+    Q_s       = 36,
+    # stator slot geometry (from "DISCO DO ESTATOR" drawing)
+    w_open    = 2.8,    # slot opening width (mm)
     h_neck    = 0.6,    # neck depth (mm)
-    h_slot    = 18.5,   # total slot depth  (mm)
-    w_bottom  = 5.444,  # slot body width at bottom (mm)
+    h_wedge   = 0.548,  # wedge depth (22°30' taper from w_open to w_body)
+    h_slot    = 18.5,   # total slot depth (mm)
+    w_body    = 5.444,  # slot body width (mm)
     R_bot     = 3.885,  # slot bottom arc radius (mm)
     # rotor
     R_re      = 57.0,   # rotor outer radius
-    R_ri      = 21.0,   # shaft bore radius  (Ø42 H7)
-    Q_r       = 52,     # rotor slots
+    R_ri      = 21.0,   # shaft bore radius (Ø42 H7)
+    Q_r       = 28,     # rotor bars
     # misc
     R_ag      = 57.25,  # airgap mid-radius (for block label)
     R_bound   = 110.0,  # boundary circle radius
 )
 
 # ── Stator base slot vertices (slot centred on +X axis) ──────────────────────
-_g  = GEO
-_hw = _g['w_open'] / 2           # 1.400 mm  (half opening)
-_hb = _g['w_bottom'] / 2         # 2.722 mm  (half body width at bottom)
-_Rn = _g['R_si'] + _g['h_neck']  # 58.100 mm (neck-end radius)
-_Rb = _g['R_si'] + _g['h_slot']  # 76.000 mm (body-end radius)
+# Local frame: x = radial outward from centre, y = tangential.
+# Profile: neck → wedge (22°30') → straight body → arc at bottom.
+_g   = GEO
+_hw  = _g['w_open'] / 2         # 1.400 mm (half opening)
+_hb  = _g['w_body'] / 2         # 2.722 mm (half body width)
+_Rn  = _g['R_si'] + _g['h_neck']                      # 58.100 mm
+_Rw  = _g['R_si'] + _g['h_neck'] + _g['h_wedge']      # 58.648 mm (wedge end)
+_Rb  = _g['R_si'] + _g['h_slot']                       # 76.000 mm (deepest)
+
+# Arc centre in GEO frame (for slot 0 on +X axis)
+_ARC_CX_S = _g['R_si'] + _g['h_slot'] - _g['R_bot']   # 72.115 mm
+# Tangent point from wedge corner to slot bottom arc
+_CORNER_R = (_Rw, _hb)   # right wedge corner in GEO frame
+_d_cx = _ARC_CX_S - _CORNER_R[0]
+_d_cy = 0.0 - _CORNER_R[1]
+_D_tan = math.hypot(_d_cx, _d_cy)
+_L_tan = math.sqrt(_D_tan**2 - _g['R_bot']**2)
+_base_ang = math.atan2(_d_cy, _d_cx)
+_alpha_tan = math.asin(_g['R_bot'] / _D_tan)
+# Choose tangent point with positive y (right side of arc)
+_Tx = _CORNER_R[0] + _L_tan * math.cos(_base_ang - _alpha_tan)
+_Ty = _CORNER_R[1] + _L_tan * math.sin(_base_ang - _alpha_tan)
+# Verify / swap if needed
+if _Ty < 0:
+    _Tx = _CORNER_R[0] + _L_tan * math.cos(_base_ang + _alpha_tan)
+    _Ty = _CORNER_R[1] + _L_tan * math.sin(_base_ang + _alpha_tan)
 
 _BASE_S = [
     (_g['R_si'], +_hw),   # P1 – bore, CCW side
     (_Rn,        +_hw),   # P2 – neck end, CCW
-    (_Rb,        +_hb),   # P3 – body bottom, CCW
-    (_Rb,        -_hb),   # P4 – body bottom, CW
-    (_Rn,        -_hw),   # P5 – neck end, CW
-    (_g['R_si'], -_hw),   # P6 – bore, CW side
+    (_Rw,        +_hb),   # P3 – wedge end, CCW
+    (_Tx,        +_Ty),   # P4 – tangent point, CCW
+    (_Rb,        0.0),    # P5 – deepest point (arc midpoint on slot axis)
+    (_Tx,        -_Ty),   # P6 – tangent point, CW
+    (_Rw,        -_hb),   # P7 – wedge end, CW
+    (_Rn,        -_hw),   # P8 – neck end, CW
+    (_g['R_si'], -_hw),   # P9 – bore, CW side
 ]
 
-_HALF_DEG_S = math.degrees(math.asin(_hw / _g['R_si']))   # ≈ 1.394°
-_SLOT_ARC_S = 2.0 * _HALF_DEG_S                            # ≈ 2.788° (opening)
-_TOOTH_ARC_S = 360.0 / _g['Q_s'] - _SLOT_ARC_S            # ≈ 2.212° (tooth face)
+_HALF_DEG_S  = math.degrees(math.asin(_hw / _g['R_si']))   # ≈ 1.394°
+_SLOT_ARC_S  = 2.0 * _HALF_DEG_S                            # ≈ 2.788° (opening)
+_TOOTH_ARC_S = 360.0 / _g['Q_s'] - _SLOT_ARC_S             # ≈ 7.212° (tooth face)
 
-# Slot-bottom arc: P4 → P3 CCW, radius R_bot = 3.885 mm
-_BOT_ARC_S = 2.0 * math.degrees(math.asin(_hb / _g['R_bot']))  # ≈ 89.0°
+# Slot-bottom arc: split into two arcs at deepest point (avoids >180° arc)
+# Each half: P6→P5 CCW (95°) and P5→P4 CCW (95°)
+_aR_s = math.atan2(_Ty - 0.0, _Tx - _ARC_CX_S)    # angle of T_right from arc centre
+_HALF_BOT_ARC_S = math.degrees(_aR_s)               # ≈ 95° each half
 
 
-# ── Rotor slot geometry (28-slot original scaled by 28/52) ───────────────────
-_SCALE_R  = 28.0 / 52.0
+# ── Rotor slot geometry (28 bars, native dimensions from drawing) ─────────────
+_W_OPEN_R  = 0.600          # opening width (mm)
+_W_TOP_R   = 6.198          # trapezoid top width (mm)
+_R_BOT_R   = 2.031 / 2.0   # bottom semicircle radius (mm)
+_Y_FLARE_R = 2.600          # beak/flare depth (mm)
+_Y_BOT_R   = 22.000         # total slot depth (mm)
 
-_W_OPEN_R = 0.600 * _SCALE_R        # 0.3231 mm  (opening width)
-_W_TOP_R  = 6.198 * _SCALE_R        # 3.3374 mm  (trapezoid top width)
-_R_BOT_R  = 2.031 * _SCALE_R / 2.0  # 0.5468 mm  (bottom semicircle radius)
-_Y_FLARE_R = 2.600 * _SCALE_R       # 1.4000 mm  (flare section depth)
-_Y_BOT_R  = 22.00 * _SCALE_R        # 11.846 mm  (total slot depth)
-
-_R_NE_R  = _g['R_re'] - _Y_FLARE_R           # 55.600 mm  (end of flare)
-_R_ARC_R = _g['R_re'] - _Y_BOT_R + _R_BOT_R  # 45.701 mm  (bottom-arc centre)
+_R_NE_R  = _g['R_re'] - _Y_FLARE_R           # 54.400 mm (end of flare)
+_R_ARC_R = _g['R_re'] - _Y_BOT_R + _R_BOT_R  # 36.016 mm (bottom-arc centre)
 
 # Base rotor slot vertices (local frame: x = radial outward, y = tangential)
 _BASE_R = [
     (_g['R_re'], +_W_OPEN_R / 2.0),  # P1 – opening CCW
     (_R_NE_R,    +_W_TOP_R  / 2.0),  # P2 – flare end CCW
-    (_R_ARC_R,   +_R_BOT_R),          # P3 – arc start CCW  (right of semicircle)
-    (_R_ARC_R,   -_R_BOT_R),          # P4 – arc start CW   (left  of semicircle)
+    (_R_ARC_R,   +_R_BOT_R),          # P3 – arc start CCW
+    (_R_ARC_R,   -_R_BOT_R),          # P4 – arc start CW
     (_R_NE_R,    -_W_TOP_R  / 2.0),  # P5 – flare end CW
     (_g['R_re'], -_W_OPEN_R / 2.0),  # P6 – opening CW
 ]
 
-_HALF_DEG_R  = math.degrees(math.asin(_W_OPEN_R / 2.0 / _g['R_re']))  # ≈ 0.1623°
-_OPEN_ARC_R  = 2.0 * _HALF_DEG_R                                        # ≈ 0.3246°
-_PITCH_R     = 360.0 / _g['Q_r']                                        # 6.9231°
-_TOOTH_ARC_R = _PITCH_R - _OPEN_ARC_R                                   # ≈ 6.5985°
+_HALF_DEG_R  = math.degrees(math.asin(_W_OPEN_R / 2.0 / _g['R_re']))
+_OPEN_ARC_R  = 2.0 * _HALF_DEG_R                          # ≈ 0.603°
+_PITCH_R     = 360.0 / _g['Q_r']                           # 12.857°
+_TOOTH_ARC_R = _PITCH_R - _OPEN_ARC_R                      # ≈ 12.254°
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -177,32 +204,43 @@ def draw_circles():
 
 
 def draw_stator_slots():
-    """72 semi-closed stator slots + tooth-face arcs."""
+    """36 semi-closed stator slots + tooth-face arcs.
+
+    Slot profile: neck → wedge (22°30') → straight body → 2×95° arc.
+    """
     Q = GEO['Q_s']
     for i in range(Q):
-        P1, P2, P3, P4, P5, P6 = _slot_pts_s(i)
+        P1, P2, P3, P4, P5, P6, P7, P8, P9 = _slot_pts_s(i)
 
+        # Right side: neck → wedge → body wall
         femm.mi_drawline(*P1, *P2)   # right neck
-        femm.mi_drawline(*P2, *P3)   # right body taper
-        femm.mi_drawarc(*P4, *P3, _BOT_ARC_S, 5)  # slot bottom arc (CCW)
-        femm.mi_drawline(*P4, *P5)   # left body taper
-        femm.mi_drawline(*P5, *P6)   # left neck
+        femm.mi_drawline(*P2, *P3)   # right wedge (22°30')
+        femm.mi_drawline(*P3, *P4)   # right body wall to tangent point
 
-        # Opening arc P6 → P1 (CCW, ≈ 2.788°)
-        femm.mi_drawarc(*P6, *P1, _SLOT_ARC_S, 1)
+        # Slot bottom arc split: P6→P5 CCW (95°) then P5→P4 CCW (95°)
+        femm.mi_drawarc(*P6, *P5, _HALF_BOT_ARC_S, 5)
+        femm.mi_drawarc(*P5, *P4, _HALF_BOT_ARC_S, 5)
 
-        # Tooth face arc P1_i → P6_{i+1} (CCW, ≈ 2.212°)
-        P6_next = _slot_pts_s((i + 1) % Q)[5]
-        femm.mi_drawarc(*P1, *P6_next, _TOOTH_ARC_S, 1)
+        # Left side: body wall → wedge → neck
+        femm.mi_drawline(*P6, *P7)   # left body wall from tangent point
+        femm.mi_drawline(*P7, *P8)   # left wedge
+        femm.mi_drawline(*P8, *P9)   # left neck
+
+        # Opening arc P9 → P1 (CCW, ≈ 2.788°)
+        femm.mi_drawarc(*P9, *P1, _SLOT_ARC_S, 1)
+
+        # Tooth face arc P1_i → P9_{i+1} (CCW, ≈ 7.212°)
+        P9_next = _slot_pts_s((i + 1) % Q)[8]
+        femm.mi_drawarc(*P1, *P9_next, _TOOTH_ARC_S, 1)
 
 
 def draw_rotor_bars():
-    """52 semi-closed rotor slots: trapezoidal with semicircle bottom.
+    """28 semi-closed rotor slots: trapezoidal with semicircle bottom.
 
-    Each slot has:
-      P1/P6  – opening at R_re (57.0 mm), half-width 0.162 mm
-      P2/P5  – end of flare at R_ne (55.6 mm), half-width 1.669 mm
-      P3/P4  – ends of bottom semicircle of radius 0.547 mm
+    Each slot has (native 28-bar dimensions from drawing):
+      P1/P6  – opening at R_re (57.0 mm), half-width 0.300 mm
+      P2/P5  – end of flare at R_ne (54.4 mm), half-width 3.099 mm
+      P3/P4  – ends of bottom semicircle of radius 1.016 mm
     """
     Q = GEO['Q_r']
     for i in range(Q):
@@ -235,23 +273,23 @@ def _pt(R, theta_rad):
 
 
 def stator_slot_label_pos(n: int, config: int = 1, layer: int = 0):
-    """Centroid inside stator slot n (0-indexed). R ≈ 66.75 mm."""
+    """Centroid inside stator slot n (0-indexed). R ≈ 65 mm (mid-slot body)."""
     theta = n * 2.0 * math.pi / GEO['Q_s']
-    R_lbl = (GEO['R_si'] + GEO['R_si'] + GEO['h_slot']) / 2.0  # 66.75 mm
+    R_lbl = (_Rw + _Tx) / 2.0   # midpoint of straight body section
     return _pt(R_lbl, theta)
 
 
 def rotor_bar_label_pos(n: int):
     """Centroid inside rotor bar n (0-indexed). Mid-depth of trapezoid."""
     theta = n * 2.0 * math.pi / GEO['Q_r']
-    r_mid = (_R_NE_R + _R_ARC_R) / 2.0   # ≈ 50.65 mm
+    r_mid = (_R_NE_R + _R_ARC_R) / 2.0   # ≈ 45.2 mm
     return _pt(r_mid, theta)
 
 
 def rotor_iron_label_pos(n: int):
     """Iron region between rotor bars (deep inner yoke)."""
     theta = (n + 0.5) * 2.0 * math.pi / GEO['Q_r']
-    return _pt(35.0, theta)
+    return _pt(28.0, theta)
 
 
 def region_label_pos(name: str):
@@ -260,13 +298,12 @@ def region_label_pos(name: str):
         return _pt((g['R_se'] + g['R_bound']) / 2.0, 0.0)
     if name == 'stator_yoke':
         theta_mid = 0.5 * 2.0 * math.pi / g['Q_s']
-        return _pt((76.0 + g['R_se']) / 2.0, theta_mid)
+        return _pt((_Rb + g['R_se']) / 2.0, theta_mid)
     if name == 'airgap':
         return _pt(g['R_ag'], 0.0)
     if name == 'rotor_yoke':
-        # Deep in inner yoke (below slot bottoms at ≈45.15 mm), between slots 0 and 1
         theta_mid = 0.5 * 2.0 * math.pi / g['Q_r']
-        return _pt(35.0, theta_mid)
+        return _pt(28.0, theta_mid)
     if name == 'shaft':
         return _pt(g['R_ri'] / 2.0, 0.0)
     raise ValueError(name)

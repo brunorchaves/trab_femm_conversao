@@ -1,11 +1,12 @@
 """
-plot_geometry.py — Cross-section plots of stator (Q_s=72) and rotor (Q_r=52).
-Geometry matches geometry.py exactly (updated rotor: trapezoidal semi-closed slots).
+plot_geometry.py — Cross-section plots of stator (Q_s=36) and rotor (Q_r=28).
+Geometry matches geometry.py exactly (new: wedge profile stator, native rotor).
 
 Uso:
   ~/femm_env/bin/python tools/plot_geometry.py
 """
 import os
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -29,55 +30,81 @@ BG    = 'white'
 # ── Machine parameters ────────────────────────────────────────────────────────
 R_se      = 91.4
 R_si      = 57.5
-Q_s       = 72
+Q_s       = 36
 w_open    = 2.8
 h_neck    = 0.6
+h_wedge   = 0.548
 h_slot    = 18.5
-w_bottom  = 5.444
+w_body    = 5.444
 R_bot_arc = 3.885
 
-_hw = w_open / 2
-_hb = w_bottom / 2
-_Rn = R_si + h_neck
-_Rb = R_si + h_slot   # 76.0 mm
+_hw = w_open / 2       # 1.400
+_hb = w_body / 2       # 2.722
+_Rn = R_si + h_neck    # 58.100
+_Rw = R_si + h_neck + h_wedge  # 58.648
+_Rb = R_si + h_slot    # 76.000
+
+# Arc centre & tangent point (same math as geometry.py)
+_ARC_CX = R_si + h_slot - R_bot_arc  # 72.115
+_CORNER = (_Rw, _hb)
+_dx = _ARC_CX - _CORNER[0]
+_dy = 0.0 - _CORNER[1]
+_D = math.hypot(_dx, _dy)
+_L = math.sqrt(_D**2 - R_bot_arc**2)
+_base = math.atan2(_dy, _dx)
+_alpha = math.asin(R_bot_arc / _D)
+_Tx = _CORNER[0] + _L * math.cos(_base - _alpha)
+_Ty = _CORNER[1] + _L * math.sin(_base - _alpha)
+if _Ty < 0:
+    _Tx = _CORNER[0] + _L * math.cos(_base + _alpha)
+    _Ty = _CORNER[1] + _L * math.sin(_base + _alpha)
 
 BASE_S = [
-    (R_si, +_hw), (_Rn, +_hw), (_Rb, +_hb),
-    (_Rb,  -_hb), (_Rn, -_hw), (R_si, -_hw),
+    (R_si, +_hw),   # P1 – bore CCW
+    (_Rn,  +_hw),   # P2 – neck end CCW
+    (_Rw,  +_hb),   # P3 – wedge end CCW
+    (_Tx,  +_Ty),   # P4 – tangent CCW
+    (_Rb,  0.0),    # P5 – deepest point (arc midpoint)
+    (_Tx,  -_Ty),   # P6 – tangent CW
+    (_Rw,  -_hb),   # P7 – wedge end CW
+    (_Rn,  -_hw),   # P8 – neck end CW
+    (R_si, -_hw),   # P9 – bore CW
 ]
 
-# ── Rotor parameters (Q_r=52, trapezoidal semi-closed, scaled 28/52) ──────────
+_HALF_DEG_S  = np.degrees(np.arcsin(_hw / R_si))
+_SLOT_ARC_S  = 2.0 * _HALF_DEG_S
+_TOOTH_ARC_S = 360.0 / Q_s - _SLOT_ARC_S
+
+# ── Rotor parameters (Q_r=28, native dimensions — no scaling) ─────────────────
 R_re   = 57.0
-R_ri   = 21.0      # shaft bore Ø42 H7
-Q_r    = 52
+R_ri   = 21.0
+Q_r    = 28
 
-# Shaft keyway geometry (Ø42 H7 + 2 × 10 H7 keyways @ 180°)
-_KW_HW      = 5.00    # half-width of keyway (10 mm total)
-_KW_R_OUTER = 25.17   # radial extent of keyway (50.34/2 mm)
-_KW_FILLET  = 1.00    # corner fillet radius R1
+_KW_HW      = 5.00
+_KW_R_OUTER = 25.17
+_KW_FILLET  = 1.00
 
-_SCALE = 28.0 / 52.0
-_W_OPEN_R = 0.600 * _SCALE      # 0.3231 mm
-_W_TOP_R  = 6.198 * _SCALE      # 3.3374 mm
-_R_BOT_R  = 2.031 * _SCALE / 2  # 0.5468 mm  (bottom semicircle radius)
-_Y_FLARE  = 2.600 * _SCALE      # 1.4000 mm  (flare depth)
-_Y_BOT    = 22.00 * _SCALE      # 11.846 mm  (total slot depth)
-_R_NE     = R_re - _Y_FLARE     # 55.600 mm  (end of flare)
-_R_ARC    = R_re - _Y_BOT + _R_BOT_R  # 45.701 mm (arc centre)
+_W_OPEN_R = 0.600
+_W_TOP_R  = 6.198
+_R_BOT_R  = 2.031 / 2.0   # 1.0155
+_Y_FLARE  = 2.600
+_Y_BOT    = 22.000
+_R_NE     = R_re - _Y_FLARE      # 54.400
+_R_ARC    = R_re - _Y_BOT + _R_BOT_R  # 36.0155
 
 BASE_R = [
-    (R_re,  +_W_OPEN_R / 2),   # P1 – opening CCW
-    (_R_NE, +_W_TOP_R  / 2),   # P2 – flare end CCW
-    (_R_ARC, +_R_BOT_R),        # P3 – arc start (right)
-    (_R_ARC, -_R_BOT_R),        # P4 – arc end   (left)
-    (_R_NE, -_W_TOP_R  / 2),   # P5 – flare end CW
-    (R_re,  -_W_OPEN_R / 2),   # P6 – opening CW
+    (R_re,  +_W_OPEN_R / 2),
+    (_R_NE, +_W_TOP_R  / 2),
+    (_R_ARC, +_R_BOT_R),
+    (_R_ARC, -_R_BOT_R),
+    (_R_NE, -_W_TOP_R  / 2),
+    (R_re,  -_W_OPEN_R / 2),
 ]
 
 _HALF_DEG_R  = np.degrees(np.arcsin(_W_OPEN_R / 2 / R_re))
-_OPEN_ARC_R  = 2.0 * _HALF_DEG_R          # ≈ 0.325°
-_PITCH_R     = 360.0 / Q_r                # 6.923°
-_TOOTH_ARC_R = _PITCH_R - _OPEN_ARC_R     # ≈ 6.598°
+_OPEN_ARC_R  = 2.0 * _HALF_DEG_R
+_PITCH_R     = 360.0 / Q_r
+_TOOTH_ARC_R = _PITCH_R - _OPEN_ARC_R
 
 
 # ── Geometry helpers ──────────────────────────────────────────────────────────
@@ -95,30 +122,55 @@ def arc_pts(R, a1, a2, n=80):
     return R * np.cos(t), R * np.sin(t)
 
 
-def rounded_bottom_s(P3, P4, R_arc, n=50):
-    """Stator slot bottom arc: bulges outward (toward yoke)."""
-    mx, my = (P3[0] + P4[0]) / 2, (P3[1] + P4[1]) / 2
-    hc = np.hypot(P3[0] - mx, P3[1] - my)
-    d  = np.sqrt(max(R_arc**2 - hc**2, 0.0))
-    rm = np.hypot(mx, my)
-    cx, cy = mx - d * mx / rm, my - d * my / rm
-    a3 = np.arctan2(P3[1] - cy, P3[0] - cx)
-    a4 = np.arctan2(P4[1] - cy, P4[0] - cx)
-    if a4 > a3:
-        a4 -= 2 * np.pi
-    t = np.linspace(a3, a4, n)
-    return cx + R_arc * np.cos(t), cy + R_arc * np.sin(t)
+def slot_bottom_arc_s(P4, P5, n=60):
+    """Stator slot bottom arc from P5 to P4 (CCW, ~190°).
+    
+    P4 = tangent point (CCW side), P5 = tangent point (CW side).
+    Arc centre is at radial distance ARC_CX from motor centre, on slot centreline.
+    """
+    # Arc centre for the rotated slot
+    cx = (P4[0] + P5[0]) / 2
+    cy = (P4[1] + P5[1]) / 2
+    # The arc centre is further out radially from midpoint of tangent pts
+    # by sqrt(R_bot^2 - half_chord^2)
+    half_chord = np.hypot(P4[0] - cx, P4[1] - cy)
+    d = np.sqrt(max(R_bot_arc**2 - half_chord**2, 0.0))
+    rm = np.hypot(cx, cy)
+    # Centre is radially outward from midpoint
+    cx_arc = cx + d * cx / rm
+    cy_arc = cy + d * cy / rm
+    
+    # Angle from centre to P5 (start) and P4 (end), CCW
+    a5 = np.arctan2(P5[1] - cy_arc, P5[0] - cx_arc)
+    a4 = np.arctan2(P4[1] - cy_arc, P4[0] - cx_arc)
+    # Go CCW from P5 to P4 (through deepest point, which is radially outward)
+    if a4 <= a5:
+        a4 += 2 * np.pi
+    t = np.linspace(a5, a4, n)
+    return cx_arc + R_bot_arc * np.cos(t), cy_arc + R_bot_arc * np.sin(t)
 
 
 def stator_slot_poly(i, n_arc=30):
-    """Polygon (conductor region) for stator slot i."""
+    """Polygon for stator slot i (9-point profile with wedge + split arc)."""
     pts = rot_pts(BASE_S, i * 2 * np.pi / Q_s)
-    P1, P2, P3, P4, P5, P6 = pts
-    ax_x, ax_y = arc_pts(R_si, np.arctan2(P6[1], P6[0]),
-                                np.arctan2(P1[1], P1[0]), n_arc)
-    bx, by = rounded_bottom_s(P3, P4, R_bot_arc, n_arc)
-    px = np.concatenate([ax_x, [P2[0], P3[0]], bx, [P5[0], P6[0]]])
-    py = np.concatenate([ax_y, [P2[1], P3[1]], by, [P5[1], P6[1]]])
+    P1, P2, P3, P4, P5, P6, P7, P8, P9 = pts
+    
+    # Opening arc P9 → P1 (CCW at bore radius)
+    a9 = np.arctan2(P9[1], P9[0])
+    a1 = np.arctan2(P1[1], P1[0])
+    if a1 < a9:
+        a1 += 2 * np.pi
+    t_op = np.linspace(a9, a1, max(4, n_arc // 4))
+    ox = R_si * np.cos(t_op)
+    oy = R_si * np.sin(t_op)
+    
+    # Slot bottom arc: P6→P5 (95° CCW) then P5→P4 (95° CCW)
+    bx1, by1 = slot_bottom_arc_s(P5, P6, n_arc // 2)
+    bx2, by2 = slot_bottom_arc_s(P4, P5, n_arc // 2)
+    
+    # Full polygon: opening → right side → arc (two halves) → left side
+    px = np.concatenate([ox, [P2[0], P3[0], P4[0]], bx2, bx1, [P7[0], P8[0]]])
+    py = np.concatenate([oy, [P2[1], P3[1], P4[1]], by2, by1, [P7[1], P8[1]]])
     return px, py
 
 
@@ -137,7 +189,7 @@ def rotor_bar_poly(n, n_arc=80):
     bx = cx + r_b * np.cos(t_bot)
     by = cy + r_b * np.sin(t_bot)
 
-    # Opening arc P6→P1 (CCW, tiny arc at R_re)
+    # Opening arc P6→P1 (CCW, at R_re)
     a6 = np.arctan2(P6[1], P6[0])
     a1 = np.arctan2(P1[1], P1[0])
     if a1 < a6:
@@ -146,14 +198,13 @@ def rotor_bar_poly(n, n_arc=80):
     ox = R_re * np.cos(t_op)
     oy = R_re * np.sin(t_op)
 
-    # Polygon: opening arc → right walls → bottom arc → left walls (closed)
     xs = np.concatenate([ox, [P1[0], P2[0], P3[0]], bx, [P5[0], P6[0]]])
     ys = np.concatenate([oy, [P1[1], P2[1], P3[1]], by, [P5[1], P6[1]]])
     return xs, ys
 
 
 def shaft_hole_with_keyways(n_arc=240, n_fillet=20):
-    """CCW polygon of the shaft bore + 2 keyways @ 0° and 180°, with R1 fillets."""
+    """CCW polygon of the shaft bore + 2 keyways @ ±90°, with R1 fillets."""
     R_bore = R_ri
     hw     = _KW_HW
     R_kw   = _KW_R_OUTER
@@ -179,7 +230,7 @@ def shaft_hole_with_keyways(n_arc=240, n_fillet=20):
         a0 = np.arctan2(p0[1] - C[1], p0[0] - C[0])
         a1 = np.arctan2(p1[1] - C[1], p1[0] - C[0])
         if a0 < a1:
-            a0 += 2 * np.pi   # CW direction
+            a0 += 2 * np.pi
         return [(C[0] + r * np.cos(t), C[1] + r * np.sin(t))
                 for t in np.linspace(a0, a1, n)]
 
@@ -235,11 +286,11 @@ for i in range(Q_s):
     ax.add_patch(plt.Polygon(list(zip(px, py)), closed=True,
                               fc=CU, ec=EDG, lw=0.25, alpha=0.90, zorder=3))
 
-for i in [0, 18, 36, 54]:
+for i in [0, 9, 18, 27]:
     theta_c = i * 2 * np.pi / Q_s
-    r_lbl = (_Rb + R_si) / 2
+    r_lbl = (_Rw + _Tx) / 2
     ax.text(r_lbl * np.cos(theta_c), r_lbl * np.sin(theta_c),
-            str(i + 1), fontsize=6, color='white', ha='center', va='center',
+            str(i + 1), fontsize=7, color='white', ha='center', va='center',
             fontweight='bold', zorder=5)
 
 dim(ax, -R_se, -R_se - 8, R_se, -R_se - 8,
@@ -253,11 +304,11 @@ ax.set_ylim(-R_se - 20, R_se + 18)
 ax.set_title(f'Seção transversal completa  —  $Q_s$ = {Q_s} ranhuras',
              fontsize=12, color='#111', pad=5)
 
-# ── RIGHT: 4-slot detail ──────────────────────────────────────────────────────
+# ── RIGHT: 3-slot detail ─────────────────────────────────────────────────────
 ax = axes_s[1]
 ax.set_aspect('equal'); ax.set_facecolor(BG); ax.axis('off')
 
-DS    = [0, 1, 2, 3]
+DS    = [0, 1, 2]
 a_lo  = (DS[0]  - 0.85) * 2 * np.pi / Q_s
 a_hi  = (DS[-1] + 1.85) * 2 * np.pi / Q_s
 t_out = np.linspace(a_lo, a_hi, 300)
@@ -270,31 +321,32 @@ ax.fill(np.append(R_si * np.cos(t_out), 0),
         color=AIR, alpha=0.6, zorder=0)
 
 for R, lc, ls, lw in [(R_se, EDG, '-', 1.2), (R_si, '#0055aa', '--', 0.9),
-                       (_Rn, '#228822', ':', 0.8), (_Rb, '#cc3300', ':', 0.8)]:
+                       (_Rn, '#228822', ':', 0.8), (_Rw, '#884400', ':', 0.8),
+                       (_Rb, '#cc3300', ':', 0.8)]:
     ax.plot(R * np.cos(t_out), R * np.sin(t_out), color=lc, ls=ls, lw=lw, zorder=5)
 
-slot_colors = [CU, '#3a7ec8', '#2aaa55', '#c8a020']
+slot_colors = [CU, '#3a7ec8', '#2aaa55']
 for k, i in enumerate(DS):
     px, py = stator_slot_poly(i, n_arc=60)
     ax.add_patch(plt.Polygon(list(zip(px, py)), closed=True,
                               fc=slot_colors[k], ec=EDG, lw=0.7, alpha=0.85, zorder=3))
     theta_c = i * 2 * np.pi / Q_s
-    r_lbl   = (_Rb + R_si) / 2
+    r_lbl = (_Rw + _Tx) / 2
     ax.text(r_lbl * np.cos(theta_c), r_lbl * np.sin(theta_c),
-            str(i + 1), fontsize=8, color='white', ha='center', va='center',
+            str(i + 1), fontsize=9, color='white', ha='center', va='center',
             fontweight='bold', zorder=6)
 
-P1, P2, P3, P4, P5, P6 = rot_pts(BASE_S, 0.0)
+# Dimensions on slot 0
 dim(ax, R_si + 0.8, -_hw, R_si + 0.8, +_hw,
-    f'$w_o$ = {w_open} mm', lcolor='#0055aa', fsize=7.5, tx=R_si + 3.2, ty=0, rot=90)
+    f'$w_o$ = {w_open} mm', lcolor='#0055aa', fsize=7.5, tx=R_si + 3.5, ty=0, rot=90)
 dim(ax, R_si, _hw + 1.4, _Rn, _hw + 1.4,
     f'$h_n$ = {h_neck}', lcolor='#228822', fsize=7.5, tx=(R_si + _Rn) / 2, ty=_hw + 2.5)
-dim(ax, _Rb - 1.0, -_hb, _Rb - 1.0, +_hb,
-    f'$w_b$ = {w_bottom} mm', lcolor='#cc3300', fsize=7.5, tx=_Rb - 3.8, ty=0, rot=90)
-dim(ax, R_si, -1.0, _Rb, -1.0,
-    f'$h_s$ = {h_slot} mm', lcolor='#222', fsize=7.5, tx=(R_si + _Rb) / 2, ty=-2.4)
+dim(ax, _Rw - 1.0, -_hb, _Rw - 1.0, +_hb,
+    f'$w_b$ = {w_body} mm', lcolor='#884400', fsize=7.5, tx=_Rw - 4.0, ty=0, rot=90)
+dim(ax, R_si, -2.0, _Rb, -2.0,
+    f'$h_s$ = {h_slot} mm', lcolor='#222', fsize=7.5, tx=(R_si + _Rb) / 2, ty=-3.5)
 ax.text(_Rb + 1.3, 1.8, f'$R_{{bot}}$ = {R_bot_arc} mm', fontsize=7, color='#666', ha='left')
-ax.text(70, 13, f'Passo = {360.0/Q_s:.2f}°/ranhura', fontsize=7.5, color='#444',
+ax.text(68, 10, f'Passo = {360.0/Q_s:.2f}°/ranhura', fontsize=7.5, color='#444',
         ha='center', bbox=dict(fc='white', ec='#aaa', alpha=0.85, pad=2))
 
 xs_d = [p[0] for i in DS for p in rot_pts(BASE_S, i * 2 * np.pi / Q_s)]
@@ -302,7 +354,7 @@ ys_d = [p[1] for i in DS for p in rot_pts(BASE_S, i * 2 * np.pi / Q_s)]
 mg = 5
 ax.set_xlim(min(xs_d) - mg, R_se + mg + 6)
 ax.set_ylim(min(ys_d) - mg - 1, max(ys_d) + mg + 4)
-ax.set_title('Detalhe — 4 ranhuras (slots 1–4)  |  escala ampliada',
+ax.set_title('Detalhe — 3 ranhuras (slots 1–3)  |  escala ampliada',
              fontsize=12, color='#111', pad=5)
 
 leg_s = [mpatches.Patch(fc=IRON, ec=EDG, label='Ferro (M250-50A)'),
@@ -326,24 +378,19 @@ print(f'Salvo: {out_s}')
 fig_r, axes_r = plt.subplots(1, 2, figsize=(14, 7.2), facecolor=BG)
 fig_r.subplots_adjust(left=0.01, right=0.99, bottom=0.07, top=0.91, wspace=0.04)
 
-
-# ── LEFT: full rotor cross-section ───────────────────────────────────────────
+# ── LEFT: full rotor ─────────────────────────────────────────────────────────
 ax = axes_r[0]
 ax.set_aspect('equal'); ax.set_facecolor(BG); ax.axis('off')
 
-# Rotor iron disc
 ax.add_patch(plt.Circle((0, 0), R_re, fc=IRON, ec=EDG, lw=1.1, zorder=1))
-# Shaft with keyways (SHAFT-colored polygon: bore Ø42 + 2 × 10 keyways)
 _shaft_pts = shaft_hole_with_keyways()
 ax.add_patch(plt.Polygon(_shaft_pts, closed=True, fc=SHAFT, ec=EDG, lw=0.8, zorder=4))
 
-# 52 bars
 for n in range(Q_r):
     px, py = rotor_bar_poly(n, n_arc=40)
     ax.add_patch(plt.Polygon(list(zip(px, py)), closed=True,
                               fc=ALU, ec='#1a5580', lw=0.4, alpha=0.95, zorder=2))
 
-# Bar index labels at 4 cardinal positions
 for n in [0, Q_r // 4, Q_r // 2, 3 * Q_r // 4]:
     theta_c = n * 2 * np.pi / Q_r
     r_lbl = (_R_NE + _R_ARC) / 2
@@ -361,23 +408,20 @@ ax.set_ylim(-R_re - 20, R_re + 16)
 ax.set_title(f'Seção transversal completa  —  $Q_r$ = {Q_r} barras',
              fontsize=12, color='#111', pad=5)
 
-
-# ── RIGHT: 4-bar detail (bars 1–4 near +X axis) ──────────────────────────────
+# ── RIGHT: 3-bar detail ──────────────────────────────────────────────────────
 ax = axes_r[1]
 ax.set_aspect('equal'); ax.set_facecolor(BG); ax.axis('off')
 
-DB    = [0, 1, 2, 3]
+DB    = [0, 1, 2]
 _dh_r = np.radians(_HALF_DEG_R)
 a_lo_r = (DB[0]  - 0.9) * 2 * np.pi / Q_r
 a_hi_r = (DB[-1] + 0.9) * 2 * np.pi / Q_r
 t_arc  = np.linspace(a_lo_r, a_hi_r, 300)
 
-# Iron wedge from shaft to R_re
 ring_x = np.concatenate([R_re * np.cos(t_arc), R_ri * np.cos(t_arc[::-1])])
 ring_y = np.concatenate([R_re * np.sin(t_arc), R_ri * np.sin(t_arc[::-1])])
 ax.fill(ring_x, ring_y, color=IRON, zorder=1)
 
-# Reference arcs
 for R, lc, ls, lw in [
     (R_re,  EDG,       '-',  1.2),
     (_R_NE, '#228822', ':',  0.8),
@@ -386,8 +430,7 @@ for R, lc, ls, lw in [
 ]:
     ax.plot(R * np.cos(t_arc), R * np.sin(t_arc), color=lc, ls=ls, lw=lw, zorder=5)
 
-# 4 bars (different blues)
-bar_colors = [ALU, '#2a9fd0', '#1a8fc0', '#0a7fb0']
+bar_colors = [ALU, '#2a9fd0', '#1a8fc0']
 for k, n in enumerate(DB):
     px, py = rotor_bar_poly(n, n_arc=120)
     ax.add_patch(plt.Polygon(list(zip(px, py)), closed=True,
@@ -399,28 +442,23 @@ for k, n in enumerate(DB):
             str(n + 1), fontsize=9, color='white', ha='center', va='center',
             fontweight='bold', zorder=6)
 
-# ── Dimensions on bar 0 (on +X axis) ────────────────────────────────────────
-# Opening width at R_re
+# Dimensions on bar 0
 dim(ax, R_re + 2.0, -_W_OPEN_R/2, R_re + 2.0, +_W_OPEN_R/2,
     f'$w_o$ = {_W_OPEN_R:.3f} mm', lcolor='#0055aa', fsize=7.5,
-    tx=R_re + 4.5, ty=0, rot=90)
-
-# Trapezoid width at R_NE
+    tx=R_re + 5.0, ty=0, rot=90)
 dim(ax, _R_NE - 0.8, -_W_TOP_R/2, _R_NE - 0.8, +_W_TOP_R/2,
     f'$w_{{top}}$ = {_W_TOP_R:.3f} mm', lcolor='#228822', fsize=7.5,
-    tx=_R_NE - 3.8, ty=0, rot=90)
+    tx=_R_NE - 4.5, ty=0, rot=90)
 
-# Total slot depth
-h_slot_r = R_re - (_R_ARC - _R_BOT_R)   # R_re - R_deepest
+h_slot_r = _Y_BOT
 off_t = np.radians(-3.5)
 dim(ax,
     (_R_ARC - _R_BOT_R) * np.cos(off_t), (_R_ARC - _R_BOT_R) * np.sin(off_t),
     R_re  * np.cos(off_t), R_re  * np.sin(off_t),
-    f'$h_r$ = {h_slot_r:.2f} mm', lcolor='#222', fsize=7.5,
-    tx=((R_re + _R_ARC - _R_BOT_R) / 2) * np.cos(off_t) - 3.0,
+    f'$h_r$ = {h_slot_r:.1f} mm', lcolor='#222', fsize=7.5,
+    tx=((R_re + _R_ARC - _R_BOT_R) / 2) * np.cos(off_t) - 3.5,
     ty=((R_re + _R_ARC - _R_BOT_R) / 2) * np.sin(off_t), rot=90)
 
-# r_bot (semicircle radius)
 ax.text(_R_ARC - _R_BOT_R - 1.0, 1.0,
         f'$r_{{bot}}$ = {_R_BOT_R:.3f} mm', fontsize=7, color='#cc3300', ha='right')
 
@@ -438,7 +476,6 @@ t_mid  = (arc_t2[0] + arc_t2[-1]) / 2
 ax.text(r_ann * np.cos(t_mid), r_ann * np.sin(t_mid) + 3.5,
         f'{_PITCH_R:.2f}°\n(passo)', fontsize=7.5, color='#333', ha='center')
 
-# Circle labels
 for R, lc, txt, frac in [
     (R_re,  EDG,       f'$R_{{re}}$ = {R_re} mm', 0.82),
     (_R_NE, '#228822', f'$R_{{ne}}$ = {_R_NE:.1f} mm', 0.73),
@@ -455,14 +492,13 @@ ax.text(r_iron * np.cos(t_iron), r_iron * np.sin(t_iron),
         'ferro\n(M250-50A)', fontsize=6.5, color='#444', ha='center', va='center',
         style='italic', zorder=7)
 
-# Zoom bounds
 xmin = (_R_ARC - _R_BOT_R) * np.cos(a_hi_r) - 4
-xmax = R_re + 15
+xmax = R_re + 18
 ymin = R_re * np.sin(a_lo_r) - 4
-ymax = R_re * np.sin(a_hi_r) + 16
+ymax = R_re * np.sin(a_hi_r) + 18
 ax.set_xlim(xmin, xmax)
 ax.set_ylim(ymin, ymax)
-ax.set_title(f'Detalhe — 4 barras (barras 1–4)  |  escala ampliada',
+ax.set_title(f'Detalhe — 3 barras (barras 1–3)  |  escala ampliada',
              fontsize=12, color='#111', pad=5)
 
 leg_r = [mpatches.Patch(fc=IRON,  ec=EDG,      label='Ferro (M250-50A)'),
@@ -472,7 +508,7 @@ ax.legend(handles=leg_r, loc='lower right', fontsize=8, framealpha=0.9)
 
 fig_r.suptitle(
     f'Geometria do Rotor  |  $Q_r$ = {Q_r}  |  $R_{{re}}$ = {R_re} mm  |  '
-    f'$R_{{ri}}$ = {R_ri} mm (Ø42 H7)  |  escala 28/52',
+    f'$R_{{ri}}$ = {R_ri} mm (Ø42 H7)  |  dimensões nativas',
     fontsize=12, color='#111', y=0.975)
 
 out_r = os.path.join(_RESULTS, 'rotor_geometry_new.png')
@@ -487,42 +523,31 @@ print(f'Salvo: {out_r}')
 fig_m, ax = plt.subplots(1, 1, figsize=(9, 9), facecolor=BG)
 ax.set_aspect('equal'); ax.set_facecolor(BG); ax.axis('off')
 
-# Outer air
 ax.add_patch(plt.Circle((0, 0), R_se,  fc=AIR,  ec=EDG, lw=0.5, zorder=0))
-# Stator iron
 ax.add_patch(plt.Circle((0, 0), R_se,  fc=IRON, ec=EDG, lw=1.1, zorder=1))
-# Airgap (bore = AIR)
 ax.add_patch(plt.Circle((0, 0), R_si,  fc=AIR,  ec='none',      zorder=2))
-# Rotor iron
 ax.add_patch(plt.Circle((0, 0), R_re,  fc=IRON, ec='none',      zorder=2))
-# Shaft with keyways
 ax.add_patch(plt.Polygon(shaft_hole_with_keyways(), closed=True,
                           fc=SHAFT, ec=EDG, lw=0.7, zorder=5))
 
-# Stator slots
 for i in range(Q_s):
     px, py = stator_slot_poly(i, n_arc=8)
     ax.add_patch(plt.Polygon(list(zip(px, py)), closed=True,
                               fc=CU, ec=EDG, lw=0.2, alpha=0.90, zorder=3))
 
-# Rotor bars
 for n in range(Q_r):
     px, py = rotor_bar_poly(n, n_arc=40)
     ax.add_patch(plt.Polygon(list(zip(px, py)), closed=True,
                               fc=ALU, ec='#1a5580', lw=0.3, alpha=0.95, zorder=3))
 
-# Airgap mid-line
 t_g = np.linspace(0, 2 * np.pi, 400)
 ax.plot(57.25 * np.cos(t_g), 57.25 * np.sin(t_g),
         color='#cc2222', lw=0.6, ls='--', alpha=0.5, zorder=4)
 
-# Labels
 ax.text(0, R_se + 5, f'$Q_s$ = {Q_s}  estator', fontsize=10,
-        ha='center', color=IRON, fontweight='bold',
-        bbox=dict(fc='none', ec='none'))
+        ha='center', color=IRON, fontweight='bold')
 ax.text(0, -(R_se + 8), f'$Q_r$ = {Q_r}  rotor', fontsize=10,
-        ha='center', color='#1a5580', fontweight='bold',
-        bbox=dict(fc='none', ec='none'))
+        ha='center', color='#1a5580', fontweight='bold')
 
 ax.set_xlim(-R_se - 14, R_se + 14)
 ax.set_ylim(-R_se - 14, R_se + 14)

@@ -3,7 +3,7 @@ main.py — Orchestrates the 3-configuration FEMM simulation.
 
 Runs Configs I, II, III sequentially:
   1. Opens FEMM via Wine
-  2. Draws motor geometry (Q_s=72, Q_r=52)
+  2. Draws motor geometry (Q_s=36, Q_r=28)
   3. Assigns materials (M250-50A), circuits, and windings
   4. Meshes and solves (magnetostatic, t=0 snapshot)
   5. Extracts B_r(θ) along air gap arc (720 points)
@@ -11,10 +11,6 @@ Runs Configs I, II, III sequentially:
      NOTE: ke corrects for Carter + small iron drop at the analytical
      current level (B_teeth ≈ 1 T, iron contribution < 3 A vs 358 A
      airgap MMF — essentially lightly-saturated linear regime).
-     Running at the actual operating point (B_teeth ≈ 2 T, I ≈ 7× analytical)
-     drives the iron into extreme saturation where saturation harmonics
-     dominate the winding harmonics, making comparison with the
-     analytical formula meaningless.
   7. Saves CSV + plots harmonic summary
 
 Usage:
@@ -49,13 +45,13 @@ def _Ipk(kw1: float, N_fase: int) -> float:
     return NI_fase / N_fase
 
 
-# Config I  : N_fase = 12 coils × N_C turns = 12*N_C
-# Config II : N_fase = 24 coils × N_C turns = 24*N_C  (two layers)
+# Config I  : N_fase = 6 coils × N_C turns = 6*N_C = 60 (single layer, q=2, p=3)
+# Config II : N_fase = 12 coils × N_C turns = 12*N_C = 120 (two layers)
 # Config III: same coil count as II but β=5/6 → different kw1
 CONFIGS = {
-    'I':   {'config': 1, 'kw1': 0.9577, 'N_fase': 12 * N_C},
-    'II':  {'config': 2, 'kw1': 0.9577, 'N_fase': 24 * N_C},
-    'III': {'config': 3, 'kw1': 0.9250, 'N_fase': 24 * N_C},
+    'I':   {'config': 1, 'kw1': 0.9659, 'N_fase':  6 * N_C},
+    'II':  {'config': 2, 'kw1': 0.9659, 'N_fase': 12 * N_C},
+    'III': {'config': 3, 'kw1': 0.9330, 'N_fase': 12 * N_C},
 }
 
 

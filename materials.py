@@ -72,7 +72,7 @@ def assign_regions():
 
 
 def assign_windings(config: int, N_c: int, I_pk: float = 1.0):
-    """Place conductor labels for all 72 stator slots.
+    """Place conductor labels for all 36 stator slots.
 
     Configs I & II: use PhaseA/B/C circuits, standard turns.
     Config III: net amp-turns per slot via a single 'NC3' unit-current circuit.

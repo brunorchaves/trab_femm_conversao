@@ -2,36 +2,36 @@
 winding.py — Slot-to-circuit assignment for all 3 stator winding configurations.
 No FEMM dependency. All tables computed from first principles.
 
-Machine: 72-slot, 6-pole, 3-phase induction motor
-  P=6, p=3, m=3, q=4, Q_s=72, alpha=15 deg elec/slot
+Machine: 36-slot, 6-pole, 3-phase induction motor
+  P=6, p=3, m=3, q=2, Q_s=36, alpha=30 deg elec/slot
 """
 
 from __future__ import annotations
 
 # ── Phase belt (upper layer) ──────────────────────────────────────
-# One electrical period = 24 slots (Q_s / p = 72 / 3).
-# Belt order per period: A+, C-, B+, A-, C+, B-  (each belt = q=4 slots)
-_BELT_24: list[tuple[str, int]] = (
-    [('A', +1)] * 4 +  # slots  1– 4  → +A
-    [('C', -1)] * 4 +  # slots  5– 8  → -C
-    [('B', +1)] * 4 +  # slots  9–12  → +B
-    [('A', -1)] * 4 +  # slots 13–16  → -A
-    [('C', +1)] * 4 +  # slots 17–20  → +C
-    [('B', -1)] * 4    # slots 21–24  → -B
-)  # length = 24
+# One electrical period = 12 slots (Q_s / p = 36 / 3).
+# Belt order per period: A+, C-, B+, A-, C+, B-  (each belt = q=2 slots)
+_BELT_12: list[tuple[str, int]] = (
+    [('A', +1)] * 2 +  # slots  1– 2  → +A
+    [('C', -1)] * 2 +  # slots  3– 4  → -C
+    [('B', +1)] * 2 +  # slots  5– 6  → +B
+    [('A', -1)] * 2 +  # slots  7– 8  → -A
+    [('C', +1)] * 2 +  # slots  9–10  → +C
+    [('B', -1)] * 2    # slots 11–12  → -B
+)  # length = 12
 
 
 def _upper(n: int) -> tuple[str, int]:
     """(phase, sign) for the upper layer of 1-indexed slot n."""
-    return _BELT_24[(n - 1) % 24]
+    return _BELT_12[(n - 1) % 12]
 
 
 def _lower_short(n: int) -> tuple[str, int]:
-    """Lower layer for short-pitch β=5/6 (y1=10).
+    """Lower layer for short-pitch β=5/6 (y1=5).
 
-    Rule: lower(n) = −upper(n − y1), indices wrap mod 72.
+    Rule: lower(n) = −upper(n − y1), indices wrap mod 36.
     """
-    ref = ((n - 10 - 1) % 72) + 1
+    ref = ((n - 5 - 1) % 36) + 1
     phase, sign = _upper(ref)
     return phase, -sign
 
@@ -41,9 +41,9 @@ def _lower_short(n: int) -> tuple[str, int]:
 def slot_layers(n: int, config: int) -> list[tuple[str, int]]:
     """Return [(phase, sign), ...] for each conductor layer in slot n.
 
-    config 1 → single layer, full pitch   (I)
-    config 2 → double layer, full pitch   (II)
-    config 3 → double layer, short pitch  (III, β=5/6)
+    config 1 → single layer, full pitch y1=6  (I)
+    config 2 → double layer, full pitch y1=6  (II)
+    config 3 → double layer, short pitch y1=5 (III, β=5/6)
 
     sign +1: conductor current = +i_phase; -1: current = -i_phase.
     """
@@ -66,14 +66,14 @@ def net_current_factor(n: int, config: int) -> float:
 
 
 def full_table(config: int) -> list[dict]:
-    """Complete 72-slot assignment table for one config."""
+    """Complete 36-slot assignment table for one config."""
     return [
         {
             'slot':       n,
             'layers':     slot_layers(n, config),
             'net_Nc_Ipk': net_current_factor(n, config),
         }
-        for n in range(1, 73)
+        for n in range(1, 37)
     ]
 
 
@@ -82,7 +82,7 @@ def full_table(config: int) -> list[dict]:
 def _verify(config: int) -> None:
     """Assert every phase has zero net conductor-side count (balanced)."""
     tally = {'A': 0, 'B': 0, 'C': 0}
-    for n in range(1, 73):
+    for n in range(1, 37):
         for ph, sg in slot_layers(n, config):
             tally[ph] += sg
     for ph, s in tally.items():
@@ -90,21 +90,21 @@ def _verify(config: int) -> None:
 
 
 def _print_table(config: int) -> None:
-    names = {1: 'I  – simples passo pleno',
-             2: 'II – dupla passo pleno',
-             3: 'III– dupla passo encurtado β=5/6'}
+    names = {1: 'I  – simples passo pleno y1=6',
+             2: 'II – dupla passo pleno y1=6',
+             3: 'III– dupla passo encurtado y1=5 (β=5/6)'}
     print(f"\nConfig {names[config]}")
     print(f"{'Slot':>4}  {'Camadas':<18}  Net(Nc·Ipk)")
     print('─' * 42)
-    for row in full_table(config)[:24]:
+    for row in full_table(config)[:12]:
         lstr = ', '.join(f"{'+-'[s < 0]}{ph}" for ph, s in row['layers'])
         print(f"{row['slot']:>4}  {lstr:<18}  {row['net_Nc_Ipk']:>+.1f}")
-    print("  (repete ×3 para ranhuras 25–72)")
+    print("  (repete ×3 para ranhuras 13–36)")
 
 
 if __name__ == '__main__':
     print("=" * 50)
-    print("Winding self-test")
+    print("Winding self-test (Q_s=36, P=6, q=2)")
     print("=" * 50)
 
     for cfg in (1, 2, 3):
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         _print_table(cfg)
 
     print("\n--- Config III: slots mistos (camadas diferentes) ---")
-    for n in range(1, 25):
+    for n in range(1, 13):
         ly = slot_layers(n, 3)
         if ly[0] != ly[1]:
             u = f"{'+-'[ly[0][1]<0]}{ly[0][0]}"

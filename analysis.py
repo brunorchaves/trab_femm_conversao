@@ -11,11 +11,11 @@ matplotlib.use('Agg')   # headless — saves PNG without display
 # Pole pairs (used to convert mechanical harmonics to electrical)
 P_PAIRS = 3   # p = P/2 = 3
 
-# Analytical reference values (B_g1 = 0.9 T target)
+# Analytical reference values (B_g1 = 0.9 T target, Q_s=36, q=2)
 _ANALYTICAL = {
-    'I':   {1: 0.900, 5: 0.0386, 7: 0.0212, 11: 0.0108, 13: 0.0091},
-    'II':  {1: 0.900, 5: 0.0386, 7: 0.0212, 11: 0.0108, 13: 0.0091},
-    'III': {1: 0.900, 5: 0.0103, 7: 0.0057, 11: 0.0108, 13: 0.0091},
+    'I':   {1: 0.900, 5: 0.0482, 7: 0.0344, 11: 0.0818, 13: 0.0692},
+    'II':  {1: 0.900, 5: 0.0482, 7: 0.0344, 11: 0.0818, 13: 0.0692},
+    'III': {1: 0.900, 5: 0.0129, 7: 0.0092, 11: 0.0818, 13: 0.0692},
 }
 
 
@@ -58,16 +58,16 @@ def compute_fft(data: list) -> dict:
 def find_slot_harmonics(fft_result: dict, threshold: float = 0.005) -> list:
     """Return (nu_mec, amplitude) pairs above threshold for slot harmonics.
 
-    Expected stator slot harmonics (electrical): ν = 24M ± 1 → mec = 72M ± 3
+    Expected stator slot harmonics (electrical): ν = 12M ± 1 → mec = 36M ± 3
     """
     coeffs = fft_result['coeffs_full']
     nu_mec = fft_result['nu_mec_full']
     amps   = np.abs(coeffs)
 
-    # Stator slot harmonic indices (ν_mec = 72M ± 3, M=1,2,…)
+    # Stator slot harmonic indices (ν_mec = 36M ± 3, M=1,2,…)
     expected_mec = []
-    for M in range(1, 4):
-        expected_mec += [72 * M - P_PAIRS, 72 * M + P_PAIRS]
+    for M in range(1, 6):
+        expected_mec += [36 * M - P_PAIRS, 36 * M + P_PAIRS]
 
     found = []
     for nm in expected_mec:
@@ -102,8 +102,8 @@ def plot_spectrum(fft_result: dict, config_label: str, outfile: str):
     amp  = fft_result['amplitude']
     Bg1  = fft_result['Bg1']
 
-    # Show up to ν=55 (captures slot harmonics at ν=23,25,47,49)
-    mask = (nu >= 1) & (nu <= 55) & (amp > 0.001)
+    # Show up to ν=40 (captures slot harmonics at ν=11,13,23,25,35,37)
+    mask = (nu >= 1) & (nu <= 40) & (amp > 0.001)
     nu_s  = nu[mask]
     amp_s = amp[mask]
 
@@ -131,7 +131,7 @@ def plot_spectrum(fft_result: dict, config_label: str, outfile: str):
 
 def plot_comparison(results: dict, outfile: str):
     """Grouped bar chart comparing all 3 configs at key harmonics."""
-    nu_show = [1, 5, 7, 11, 13, 23, 25]
+    nu_show = [1, 5, 7, 11, 13, 23, 25, 35, 37]
     configs  = ['I', 'II', 'III']
     colors   = ['steelblue', 'darkorange', 'forestgreen']
     x = np.arange(len(nu_show))
@@ -169,7 +169,7 @@ def print_summary(config_label: str, fft_result: dict):
     print(f"Config {config_label}  — B_g1 = {fft_result['Bg1']:.4f} T")
     print(f"{'ν':>4}  {'|B_g,ν| (T)':>12}  {'/ B_g1':>8}")
     print(f"{'─'*50}")
-    for nu_target in [1, 5, 7, 11, 13, 23, 25, 47, 49]:
+    for nu_target in [1, 5, 7, 11, 13, 23, 25, 35, 37]:
         idx = np.where(nu == nu_target)[0]
         if len(idx):
             a = float(amp[idx[0]])

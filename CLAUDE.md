@@ -100,8 +100,9 @@ Depois: F8 para Solve, F9 para Post-Processor.
 |---|---|
 | Polos P / pares p | 6 / 3 |
 | Fases m | 3 |
-| Ranhuras estator Q_s | 72 |
-| Ranhuras rotor Q_r | 52 |
+| Ranhuras estator Q_s | 36 |
+| Ranhuras rotor Q_r | 28 |
+| Ranhuras/polo/fase q | 2 |
 | Entreferro g | 0,50 mm |
 | Tensão terminal | 127 V_rms / 60 Hz |
 | Aço | M250-50A (APERAM E105) |
@@ -114,32 +115,33 @@ Depois: F8 para Solve, F9 para Post-Processor.
 
 | Config | Camadas | Passo | k_w1 | N_fase | I_pk (A) |
 |---|---|---|---|---|---|
-| I  | Simples | pleno (y1=12) | 0,9577 | 120 | 9,79 |
-| II | Dupla   | pleno (y1=12) | 0,9577 | 240 | 4,90 |
-| III| Dupla   | 5/6 (y1=10)  | 0,9250 | 240 | 5,07 |
+| I  | Simples | pleno (y1=6) | 0,9659 | 60  | 19,41 |
+| II | Dupla   | pleno (y1=6) | 0,9659 | 120 | 9,71  |
+| III| Dupla   | 5/6 (y1=5)  | 0,9330 | 120 | 10,05 |
 
 Excitação em t=0: i_A = I_pk, i_B = i_C = −I_pk/2
 
 ---
 
-## Resultados Finais (B_g1 = 0,9 T) — Q_r=52
+## Resultados Finais (B_g1 = 0,9 T) — Q_s=36, Q_r=28
 
 | ν | Config I | Config II | Config III | Analítico I/II | Analítico III |
 |---|---|---|---|---|---|
 | 1  | 0,9000 T | 0,9000 T | 0,9000 T | 0,9000 T | 0,9000 T |
-| 5  | 0,0179 T | 0,0179 T | **0,0036 T** | 0,0386 T | 0,0103 T |
-| 7  | 0,0130 T | 0,0130 T | **0,0031 T** | 0,0212 T | 0,0057 T |
-| 11 | 0,0061 T | 0,0061 T | 0,0058 T | 0,0108 T | 0,0108 T |
-| 13 | 0,0054 T | 0,0054 T | 0,0051 T | 0,0091 T | 0,0091 T |
-| **23** | **0,2706 T** | **0,2706 T** | **0,2705 T** | — | — |
-| **25** | **0,2186 T** | **0,2186 T** | **0,2187 T** | — | — |
-| 47 | 0,0246 T | 0,0246 T | 0,0246 T | — | — |
-| 49 | 0,0356 T | 0,0356 T | 0,0355 T | — | — |
-| 71 | 0,0510 T | 0,0510 T | 0,0511 T | — | — |
-| 73 | 0,0462 T | 0,0462 T | 0,0462 T | — | — |
+| 5  | 0,0413 T | 0,0413 T | **0,0113 T** | 0,0482 T | 0,0129 T |
+| 7  | 0,0327 T | 0,0327 T | **0,0092 T** | 0,0344 T | 0,0092 T |
+| **11** | **0,2225 T** | **0,2225 T** | **0,2224 T** | 0,0818 T | 0,0818 T |
+| 13 | 0,0711 T | 0,0711 T | 0,0711 T | 0,0692 T | 0,0692 T |
+| 23 | 0,1207 T | 0,1207 T | 0,1206 T | — | — |
+| 25 | 0,0851 T | 0,0851 T | 0,0849 T | — | — |
+| 35 | 0,0522 T | 0,0522 T | 0,0525 T | — | — |
+| 37 | 0,0571 T | 0,0571 T | 0,0570 T | — | — |
 
-ν=23 (30,1% de B_g1) e ν=25 (24,3%): harmônicos de ranhura principais.
-ν = k·(Q_s/p)±1 = k·24±1, independem de Q_r e do tipo de enrolamento.
+ν=11 (24,7% de B_g1): harmônico de ranhura dominante — simultaneamente
+harmônico de enrolamento E de ranhura (ν=12×1−1=11), muito amplificado pela
+permeância de ranhura.
+Slot harmonics: ν = k·(Q_s/p)±1 = k·12±1 → 11, 13, 23, 25, 35, 37...
+Config III reduz ν=5,7 mas NÃO ν=11,13 (independem do passo de enrolamento).
 
 ---
 
@@ -157,25 +159,25 @@ chavetas. Superfícies de estator/rotor formadas por arcos e linhas radiais
 | Rotor externo | 57,0 mm | formado por arcos de barra |
 | Furo do eixo | 21,0 mm + chavetas | arcos + filetes R1 |
 
-**Ranhuras estator:** semi-fechadas, pescoço 2,8mm, corpo trapezoidal, arco R3,885mm
-**Barras rotor:** semi-fechadas, abertura 0,323mm, trapezoidal + semicírculo (escala 28/52)
+**Ranhuras estator:** semi-fechadas, pescoço 2,8mm, cunha 22°30' (h=0,548mm), corpo com arco R3,885mm (~190° split em 2×95°)
+**Barras rotor:** semi-fechadas, abertura 0,600mm, bico 40°/2,6mm, trapézio + semicírculo R1,0155mm (nativo, sem escala)
 **Furo:** Ø42 H7 com 2 rasgos de chaveta 10 H7 em ±90°, filetes R1
 
 ---
 
 ## Decisões de Implementação
 
-### Bug crítico (arco com raio errado)
-`mi_drawarc(x1,y1,x2,y2,angle,1)` calcula `r = corda / (2·sin(angle/2))`.
-Para ângulos pequenos com corda pequena (ranhura estreita), o raio fica errado.
-Fix: círculos concêntricos + linhas radiais; nenhum `mi_drawarc` por ranhura individual.
+### Bug crítico (arco >180° no FEMM)
+`mi_drawarc` com ângulo ~190° (fundo da ranhura estator) confunde detecção de
+regiões do FEMM → "Material properties have not been defined for all regions".
+Fix: ponto intermediário P5 (deepest point) divide em dois arcos de ~95°.
 
 ### Config III — labels duplicados
 Slots mistos (2 fases por slot) com 2 block labels no mesmo region geram warning.
 Fix: circuito único `NC3` com turns = net_factor × N_c × I_pk por slot.
 
 ### Fator de escala (Carter + ferro)
-FEMM com M250-50A dá B_g1 ≈ 0,52 T vs 0,9 T analítico → ke=1,73.
+FEMM com M250-50A dá B_g1 ≈ 0,68 T vs 0,9 T analítico → ke≈1,33.
 Código aplica escala automática após cada simulação (mantém espectro de forma).
 
 ### Rasgos de chaveta no furo
