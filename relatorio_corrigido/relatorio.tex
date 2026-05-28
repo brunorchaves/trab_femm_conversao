@@ -1,0 +1,281 @@
+% =====================================================================
+%  Projeto FEMM – Motores de Corrente Alternada  (versão corrigida)
+%  Q_s=36, Q_r=28, q=2
+%  Disciplina: Conversão da Energia – UFMG 2026/1
+%  Prof. Braz J. Cardoso Filho, Ph.D.
+%  Autores: Bruno Ribeiro e Arnaldo
+% =====================================================================
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{mathptmx}            % Times New Roman (texto e matemática)
+\usepackage[a4paper,
+            top=2.0cm, bottom=2.0cm,
+            left=2.0cm, right=2.0cm,
+            headheight=14pt]{geometry}
+\usepackage{tabularx}
+
+% ── Parágrafos: 3 pt de separação, sem recuo
+\usepackage{parskip}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+
+% ── Cabeçalho
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small Projeto FEMM -- Análise Harmônica de Motor CA -- UFMG}
+\fancyhead[R]{\small B. Ribeiro \& Arnaldo\quad\thepage}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+\titleformat{\section}{\normalsize\bfseries}{\thesection.}{0.4em}{}
+\titlespacing*{\section}{0pt}{5pt}{2pt}
+\titleformat{\subsection}{\normalsize\itshape}{\thesubsection.}{0.4em}{}
+\titlespacing*{\subsection}{0pt}{3pt}{1pt}
+
+\captionsetup{font=small, labelsep=period, skip=2pt}
+\sisetup{output-decimal-marker={,}}
+\renewcommand{\arraystretch}{1.07}
+
+% =====================================================================
+\begin{document}
+\fontsize{12}{15}\selectfont
+% =====================================================================
+
+{\centering\bfseries
+Análise harmônica de uma máquina de indução trifásica
+via elementos finitos (FEMM)\\[2pt]}
+{\centering\small
+Bruno Ribeiro \& Arnaldo \;|\;
+Engenharia Elétrica -- UFMG \;|\;
+Prof.\ Braz J.\ Cardoso Filho -- Conversão da Energia -- 2026/1\par}
+\vspace{3pt}
+
+% =====================================================================
+\section{Dados do projeto}
+% =====================================================================
+
+\begin{table}[h!]
+\vspace{-2pt}\centering\small
+\caption{Parâmetros da máquina (extraídos do enunciado e da laminação Fig.~1).}
+\label{tab:dados}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llll}
+\toprule
+\textbf{Parâmetro} & \textbf{Valor} & \textbf{Parâmetro} & \textbf{Valor}\\
+\midrule
+Polos $P$ / pares $p$   & $6$ / $3$    & Frequência $f_e$       & \SI{60}{Hz}\\
+Fases $m$               & $3$          & Tensão terminal $V$    & \SI{127}{V_{rms}}\\
+Ranhuras estator $Q_s$  & $36$         & Entreferro $g$         & \SI{0{,}5}{mm}\\
+Ranhuras rotor $Q_r$    & $28$         & Comprimento pacote $L$ & \SI{140}{mm}\\
+Ranhuras/polo/fase $q$  & $2$          & Aço laminações         & M250-50A\\
+Passo polar $\tau$      & $6$ ranhuras & $B_{\max}$ no núcleo   & \SI{1{,}7}{T}\\
+$\alpha$ (el./ranhura)  & \SI{30}{\degree} & $B_{g,1}$ alvo     & \SI{0{,}9}{T}\\
+Diâm.\ interno estator  & \SI{115}{mm} & Velocidade síncrona    & \SI{1200}{rpm}\\
+\bottomrule
+\end{tabular}
+\end{table}
+\vspace{-2pt}
+
+Analisam-se três configurações de enrolamento com ligação em série e
+1~cinturão por polo por fase ($q{=}2$ ranhuras/polo/fase):
+\textbf{(I)}~camada simples, passo pleno ($y_1{=}6$, $\beta{=}1$,
+\SI{180}{\degree}~el.) --- 2~bobinas por polo por fase;
+\textbf{(II)}~camada dupla, passo pleno (mesma distribuição eletromagnética
+de~I, mas com 4~bobinas por polo por fase pela segunda camada);
+\textbf{(III)}~camada dupla, passo encurtado $\beta{=}5/6$
+($y_1{=}5$ ranhuras, \SI{150}{\degree}~el.), também com 4~bobinas por polo
+por fase --- escolha clássica para atenuar a quinta e a sétima harmônica.
+
+O número de espiras em série por fase é $N_f{=}(Q_s/2m)\,N_c$
+para camada simples e $N_f{=}(Q_s/m)\,N_c$ para camada dupla,
+onde $N_c{=}10$ é o número de condutores por ranhura por camada:
+
+\begin{equation}
+N_f^{\,(I)} = \frac{36}{2\times3}\times10 = 60\;\text{espiras},
+\qquad
+N_f^{\,(II,III)} = \frac{36}{3}\times10 = 120\;\text{espiras}.
+\label{eq:Nf}
+\end{equation}
+
+% =====================================================================
+\section{Fatores $k_p$, $k_d$ e $k_w$ -- item (a)}
+% =====================================================================
+
+Para enrolamento distribuído em $q$ ranhuras equiespaçadas por polo por fase,
+com ângulo elétrico $\alpha$ entre ranhuras adjacentes e passo relativo
+$\beta{=}y_1/\tau$, os fatores de distribuição, passo e enrolamento para o
+harmônico de ordem~$\nu$ são:
+%
+\begin{equation}
+k_{d,\nu}=\frac{\sin\!\bigl(\nu\,q\,\alpha/2\bigr)}{q\,\sin\!\bigl(\nu\,\alpha/2\bigr)},
+\qquad
+k_{p,\nu}=\sin\!\left(\nu\beta\,\frac{\pi}{2}\right),
+\qquad
+k_{w,\nu}=k_{p,\nu}\cdot k_{d,\nu}.
+\label{eq:kw}
+\end{equation}
+
+Com $Q_s{=}36$, $P{=}6$, $m{=}3$: $\alpha{=}P\cdot180^{\circ}/Q_s{=}30^{\circ}$
+e $q{=}Q_s/(Pm){=}2$.
+
+\subsection*{Cálculo numérico para $\nu=1$}
+
+Substituindo $q{=}2$ e $\alpha{=}30^{\circ}$ em~\eqref{eq:kw}:
+\[
+k_{d,1}=\frac{\sin(2\times30^{\circ}/2)}{2\sin(30^{\circ}/2)}
+        =\frac{\sin 30^{\circ}}{2\sin 15^{\circ}}
+        =\frac{0{,}5000}{2\times0{,}2588}
+        =0{,}9659.
+\]
+Para passo pleno ($\beta{=}1$): $k_{p,1}=\sin 90^{\circ}=1{,}0000$,
+logo $k_{w,1}^{\,\beta=1}=0{,}9659$.
+Para passo encurtado ($\beta{=}5/6$):
+$k_{p,1}=\sin\!\bigl(\tfrac{5}{6}{\times}90^{\circ}\bigr)=\sin 75^{\circ}=0{,}9659$,
+logo $k_{w,1}^{\,\beta=5/6}=0{,}9659\times0{,}9659=0{,}9330$
+(redução de apenas $3{,}4\%$ na fundamental).
+
+Para $\nu{=}5$ e $\nu{=}7$ com $\beta{=}5/6$:
+$k_{p,5}=\sin(5{\times}75^{\circ})=\sin 375^{\circ}=\sin 15^{\circ}\approx0{,}259$
+e $k_{p,7}=\sin(7{\times}75^{\circ})=\sin 525^{\circ}=\sin 165^{\circ}\approx0{,}259$.
+O fator de passo reduz ambos para apenas $25{,}9\%$ do valor de passo pleno,
+resultando em $|k_{w,5}^{\,5/6}|{=}0{,}259\times0{,}259{=}0{,}067$
+($-74\%$) e $|k_{w,7}^{\,5/6}|{=}0{,}067$ ($-74\%$).
+
+\begin{table}[h!]
+\vspace{-1pt}\centering\small
+\caption{Fatores de enrolamento para $q{=}2$, $\alpha{=}30^{\circ}$.
+         Triplens omitidas (canceladas pela soma trifásica equilibrada).}
+\label{tab:fatores}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{crrrrrr}
+\toprule
+$\nu$ & Sentido & $|k_{d,\nu}|$ & $k_{p,\nu}\ (\beta{=}1)$
+      & $k_{p,\nu}\ (\beta{=}5/6)$
+      & $|k_{w,\nu}|\ (\beta{=}1)$ & $|k_{w,\nu}|\ (\beta{=}5/6)$\\
+\midrule
+ 1 & direto  & $0{,}9659$ & $1{,}0000$ & $0{,}9659$ & $0{,}9659$ & $0{,}9330$\\
+ 5 & reverso & $0{,}2588$ & $1{,}0000$ & $0{,}2588$ & $0{,}2588$ & $0{,}0670$\\
+ 7 & direto  & $0{,}2588$ & $1{,}0000$ & $0{,}2588$ & $0{,}2588$ & $0{,}0670$\\
+11 & reverso & $0{,}9659$ & $1{,}0000$ & $0{,}9659$ & $0{,}9659$ & $0{,}9330$\\
+13 & direto  & $0{,}9659$ & $1{,}0000$ & $0{,}9659$ & $0{,}9659$ & $0{,}9330$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Uma consequência importante de $q{=}2$ é que o fator de distribuição assume
+apenas dois valores: $|k_{d,\nu}|{=}0{,}966$ para $\nu\equiv\pm1\pmod{12}$
+e $|k_{d,\nu}|{=}0{,}259$ para $\nu\equiv\pm5\pmod{12}$.
+Em particular, $|k_{d,11}|{=}|k_{d,13}|{=}|k_{d,1}|{=}0{,}966$ ---
+diferentemente do caso $q{=}4$ ($Q_s{=}72$), onde esses harmônicos eram
+fortemente atenuados ($|k_{d,11}|{=}0{,}126$).
+Assim, $\nu{=}11$ e $\nu{=}13$ \emph{não} são suprimidos pelo enrolamento.
+O encurtamento $5/6$ também não os atenua: $|k_{p,11}|{=}|k_{p,13}|{=}0{,}966$.
+
+% =====================================================================
+\section{Espectro analítico de $B_g(\theta)$ -- item (b)}
+% =====================================================================
+
+\subsection*{Corrente de pico e fórmula do campo}
+
+Assumindo $\mu_\text{ferro}\to\infty$ e entreferro uniforme, a amplitude da
+$\nu$-ésima harmônica espacial da densidade de fluxo no entreferro de uma
+máquina trifásica excitada em $t{=}0$ com $i_A{=}I_\text{pk}$,
+$i_B{=}i_C{=}{-}I_\text{pk}/2$ é (Fitzgerald, eq.~4.6):
+%
+\begin{equation}
+|B_{g,\nu}| = \frac{6\mu_0}{\pi}\,
+              \frac{k_{w,\nu}\,N_f\,I_\text{pk}}{P\,g\,\nu},
+\label{eq:Bgnu}
+\end{equation}
+%
+donde, impondo $|B_{g,1}|{=}B_{g,1}^{\star}{=}\SI{0{,}9}{T}$:
+%
+\begin{equation}
+N_f\,I_\text{pk} = \frac{B_{g,1}^{\star}\,\pi\,P\,g}{6\,\mu_0\,k_{w,1}},
+\qquad
+\frac{|B_{g,\nu}|}{|B_{g,1}|}=\frac{|k_{w,\nu}|}{\nu\,|k_{w,1}|}.
+\label{eq:espectro}
+\end{equation}
+
+As correntes de pico para cada configuração são:
+
+\begin{equation}
+I_\text{pk}^{(I)}
+  = \frac{B_{g,1}^{\star}\,\pi\,P\,g}{6\,\mu_0\,k_{w,1}^{\beta=1}\,N_f^{(I)}}
+  = \frac{0{,}9\times\pi\times6\times5\times10^{-4}}
+         {6\times4\pi\times10^{-7}\times0{,}9659\times60}
+  \approx \SI{19{,}4}{A},
+\label{eq:Ipk1}
+\end{equation}
+\[
+I_\text{pk}^{(II)} = \frac{N_f^{(I)}\,I_\text{pk}^{(I)}}{N_f^{(II)}}
+  = \frac{60\times19{,}4}{120} \approx \SI{9{,}70}{A},
+\qquad
+I_\text{pk}^{(III)} \approx \SI{10{,}05}{A}.
+\]
+
+\begin{table}[h!]
+\vspace{-1pt}\centering\small
+\caption{Espectro analítico de $B_g$ com $|B_{g,1}|{=}\SI{0{,}9}{T}$
+         ($\mu_\text{ferro}\to\infty$, entreferro liso).
+         Triplens canceladas. Harmônicos de ranhura \emph{não} modelados aqui.}
+\label{tab:espectro}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{rccccc}
+\toprule
+      & \multicolumn{2}{c}{$\beta{=}1$ (Configs~I e~II)}
+      & \multicolumn{2}{c}{$\beta{=}5/6$ (Config~III)}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+$\nu$ & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$\,(T)
+      & $|k_{w,\nu}|/(\nu|k_{w,1}|)$ & $|B_{g,\nu}|$\,(T)\\
+\midrule
+ 1 & $1{,}0000$ & $0{,}9000$ & $1{,}0000$ & $0{,}9000$\\
+ 5 & $0{,}0536$ & $0{,}0482$ & $0{,}0144$ & $0{,}0129$\\
+ 7 & $0{,}0383$ & $0{,}0344$ & $0{,}0103$ & $0{,}0092$\\
+11 & $0{,}0909$ & $0{,}0818$ & $0{,}0909$ & $0{,}0818$\\
+13 & $0{,}0769$ & $0{,}0692$ & $0{,}0769$ & $0{,}0692$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+O encurtamento $5/6$ reduz $|B_{g,5}|$ de \SI{48{,}2}{mT} para \SI{12{,}9}{mT}
+($-73\%$) e $|B_{g,7}|$ de \SI{34{,}4}{mT} para \SI{9{,}2}{mT} ($-73\%$),
+mantendo a quinta e sétima harmônicas abaixo de $1{,}5\%$ de $B_{g,1}$.
+Em contrapartida, $|B_{g,11}|$ e $|B_{g,13}|$ permanecem em $9{,}1\%$ e $7{,}7\%$
+de $B_{g,1}$ em todas as configurações --- reflexo direto do menor espalhamento
+do enrolamento ($q{=}2$) em relação ao projeto com $q{=}4$.
+
+Adicionalmente, com $Q_s{=}36$ e $p{=}3$, os harmônicos de ranhura do estator
+concentram-se em ordens $\nu{=}k(Q_s/p){\pm}1{=}12k{\pm}1$, ou seja
+$\nu{=}11,13,23,25,\ldots$ As ordens $\nu{=}11$ e $\nu{=}13$ coincidem
+simultaneamente com harmônicos de enrolamento e harmônicos de ranhura;
+na simulação por elementos finitos (itens c e~d) espera-se que as amplitudes
+nessas ordens superem o analítico por receberem contribuição de ambas as fontes.
+
+% =====================================================================
+\begin{thebibliography}{9}\small\vspace{-2pt}
+\bibitem{fitz}
+  A.~E.~Fitzgerald, C.~Kingsley~Jr., S.~D.~Umans,
+  \textit{Máquinas Elétricas}, 7\textsuperscript{a}~ed.\ AMGH, 2014.
+\bibitem{chap}
+  S.~J.~Chapman, \textit{Fundamentos de Máquinas Elétricas},
+  5\textsuperscript{a}~ed.\ AMGH, 2013.
+\bibitem{femm}
+  D.~C.~Meeker,
+  \textit{Finite Element Method Magnetics -- User's Manual}, v.~4.2, 2019.
+  Disponível em: \texttt{femm.info}.
+\end{thebibliography}
+
+\end{document}
