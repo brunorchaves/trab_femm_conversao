@@ -197,18 +197,16 @@ for ax, lbl, ttl in panel_info:
 img_path = os.path.join(_RELAT, 'density_plot_screenshot.png')
 if os.path.exists(img_path):
     img = np.array(Image.open(img_path))
-    h, w = img.shape[:2]
-    # keep square aspect: center image in axes with equal aspect
-    ax_a.set_aspect('equal')
-    ax_a.imshow(img, extent=[0, w, h, 0], interpolation='lanczos')
-    ax_a.set_xlim(0, w)
-    ax_a.set_ylim(h, 0)
+    ax_a.imshow(img, aspect='auto', interpolation='lanczos')
+    ax_a.set_xlim(0, img.shape[1])
+    ax_a.set_ylim(img.shape[0], 0)
 else:
     ax_a.text(0.5, 0.5, 'density_plot_screenshot.png\nnão encontrado',
               ha='center', va='center', transform=ax_a.transAxes, fontsize=10)
 
 
 # ── (b) stator slot detail ────────────────────────────────────────────────────
+ax_b.set_aspect('equal')
 DS = [0, 1, 2]
 a_lo = (DS[0]  - 0.85) * 2 * np.pi / Q_s
 a_hi = (DS[-1] + 1.85) * 2 * np.pi / Q_s
@@ -263,6 +261,7 @@ ax_b.legend(handles=leg_s, loc='lower right', fontsize=7.5, framealpha=0.9)
 
 
 # ── (c) rotor bar detail ──────────────────────────────────────────────────────
+ax_c.set_aspect('equal')
 DB = [0, 1, 2]
 _dh_r  = np.radians(_HALF_DEG_R)
 a_lo_r = (DB[0]  - 0.9) * 2 * np.pi / Q_r
