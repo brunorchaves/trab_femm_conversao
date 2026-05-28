@@ -165,24 +165,28 @@ def dim(ax, x1, y1, x2, y2, label, lcolor='#222', fsize=8,
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  FIGURA COMPOSTA 1 × 3
+#  FIGURA COMPOSTA: (a) em cima, (b)+(c) em baixo
 # ══════════════════════════════════════════════════════════════════════════════
-fig = plt.figure(figsize=(18, 7.5), facecolor=BG)
-fig.subplots_adjust(left=0.01, right=0.99, bottom=0.04, top=0.90,
-                    wspace=0.06)
+fig = plt.figure(figsize=(14, 16), facecolor=BG)
+gs  = fig.add_gridspec(2, 2,
+                        height_ratios=[1.1, 1],
+                        hspace=0.08, wspace=0.06,
+                        left=0.02, right=0.98,
+                        bottom=0.03, top=0.95)
 
-axes = [fig.add_subplot(1, 3, k) for k in range(1, 4)]
-labels = ['(a)', '(b)', '(c)']
-titles = [
-    'Campo magnético $|B|$ — Config. I',
-    'Detalhe ranhuras do estator  (slots 1–3)',
-    'Detalhe barras do rotor  (barras 1–3)',
+ax_a = fig.add_subplot(gs[0, :])   # linha 0, colunas 0+1 (largura total)
+ax_b = fig.add_subplot(gs[1, 0])   # linha 1, coluna 0
+ax_c = fig.add_subplot(gs[1, 1])   # linha 1, coluna 1
+
+panel_info = [
+    (ax_a, '(a)', 'Campo magnético $|B|$ — Config. I  (FEMM 4.2)'),
+    (ax_b, '(b)', 'Detalhe ranhuras do estator  (slots 1–3)'),
+    (ax_c, '(c)', 'Detalhe barras do rotor  (barras 1–3)'),
 ]
 
-for ax, lbl, ttl in zip(axes, labels, titles):
-    ax.set_aspect('equal')
-    ax.axis('off')
+for ax, lbl, ttl in panel_info:
     ax.set_facecolor(BG)
+    ax.axis('off')
     ax.set_title(ttl, fontsize=10.5, color='#111', pad=4)
     ax.text(0.01, 0.99, lbl, transform=ax.transAxes,
             fontsize=13, fontweight='bold', color='#111',
@@ -190,20 +194,21 @@ for ax, lbl, ttl in zip(axes, labels, titles):
 
 
 # ── (a) density plot screenshot ───────────────────────────────────────────────
-ax_a = axes[0]
 img_path = os.path.join(_RELAT, 'density_plot_screenshot.png')
 if os.path.exists(img_path):
     img = np.array(Image.open(img_path))
-    ax_a.imshow(img, aspect='auto', interpolation='lanczos')
-    ax_a.set_xlim(0, img.shape[1])
-    ax_a.set_ylim(img.shape[0], 0)
+    h, w = img.shape[:2]
+    # keep square aspect: center image in axes with equal aspect
+    ax_a.set_aspect('equal')
+    ax_a.imshow(img, extent=[0, w, h, 0], interpolation='lanczos')
+    ax_a.set_xlim(0, w)
+    ax_a.set_ylim(h, 0)
 else:
     ax_a.text(0.5, 0.5, 'density_plot_screenshot.png\nnão encontrado',
               ha='center', va='center', transform=ax_a.transAxes, fontsize=10)
 
 
 # ── (b) stator slot detail ────────────────────────────────────────────────────
-ax_b = axes[1]
 DS = [0, 1, 2]
 a_lo = (DS[0]  - 0.85) * 2 * np.pi / Q_s
 a_hi = (DS[-1] + 1.85) * 2 * np.pi / Q_s
@@ -258,7 +263,6 @@ ax_b.legend(handles=leg_s, loc='lower right', fontsize=7.5, framealpha=0.9)
 
 
 # ── (c) rotor bar detail ──────────────────────────────────────────────────────
-ax_c = axes[2]
 DB = [0, 1, 2]
 _dh_r  = np.radians(_HALF_DEG_R)
 a_lo_r = (DB[0]  - 0.9) * 2 * np.pi / Q_r
