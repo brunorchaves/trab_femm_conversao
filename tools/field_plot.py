@@ -16,14 +16,14 @@ FEMM_DIR = '/tmp/femm_work'
 OUT_DIR  = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'results')
 
 # Configurações de grid
-N       = 160          # pontos por eixo  (160×160 ≈ 25 600 pontos)
+N       = 200          # pontos por eixo  (200×200 ≈ 40 000 pontos)
 R_OUTER = 92.0         # limite de plot
-R_SHAFT = 29.5         # descarta dentro do eixo
+R_SHAFT = 20.0         # descarta dentro do eixo
 
 CONFIGS = {
-    'I':   {'scale': 2.1758},
-    'II':  {'scale': 2.1758},
-    'III': {'scale': 2.1655},
+    'I':   {'scale': 1.333},
+    'II':  {'scale': 1.333},
+    'III': {'scale': 1.333},
 }
 
 CIRCLES = {          # raio (mm)  : (cor, espessura, rótulo)
