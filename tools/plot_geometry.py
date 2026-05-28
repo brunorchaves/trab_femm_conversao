@@ -122,38 +122,26 @@ def arc_pts(R, a1, a2, n=80):
     return R * np.cos(t), R * np.sin(t)
 
 
-def slot_bottom_arc_s(P4, P5, n=60):
-    """Stator slot bottom arc from P5 to P4 (CCW, ~190°).
-    
-    P4 = tangent point (CCW side), P5 = tangent point (CW side).
-    Arc centre is at radial distance ARC_CX from motor centre, on slot centreline.
-    """
-    # Arc centre for the rotated slot
-    cx = (P4[0] + P5[0]) / 2
-    cy = (P4[1] + P5[1]) / 2
-    # The arc centre is further out radially from midpoint of tangent pts
-    # by sqrt(R_bot^2 - half_chord^2)
-    half_chord = np.hypot(P4[0] - cx, P4[1] - cy)
-    d = np.sqrt(max(R_bot_arc**2 - half_chord**2, 0.0))
-    rm = np.hypot(cx, cy)
-    # Centre is radially outward from midpoint
-    cx_arc = cx + d * cx / rm
-    cy_arc = cy + d * cy / rm
-    
-    # Angle from centre to P5 (start) and P4 (end), CCW
-    a5 = np.arctan2(P5[1] - cy_arc, P5[0] - cx_arc)
-    a4 = np.arctan2(P4[1] - cy_arc, P4[0] - cx_arc)
-    # Go CCW from P5 to P4 (through deepest point, which is radially outward)
-    if a4 <= a5:
-        a4 += 2 * np.pi
-    t = np.linspace(a5, a4, n)
+def slot_bottom_arc_s(Pstart, Pend, cx_arc, cy_arc, n=60):
+    """Stator slot bottom arc from Pstart to Pend (CCW) around given centre."""
+    a_start = np.arctan2(Pstart[1] - cy_arc, Pstart[0] - cx_arc)
+    a_end = np.arctan2(Pend[1] - cy_arc, Pend[0] - cx_arc)
+    if a_end <= a_start:
+        a_end += 2 * np.pi
+    t = np.linspace(a_start, a_end, n)
     return cx_arc + R_bot_arc * np.cos(t), cy_arc + R_bot_arc * np.sin(t)
 
 
 def stator_slot_poly(i, n_arc=30):
     """Polygon for stator slot i (9-point profile with wedge + split arc)."""
-    pts = rot_pts(BASE_S, i * 2 * np.pi / Q_s)
+    theta = i * 2 * np.pi / Q_s
+    pts = rot_pts(BASE_S, theta)
     P1, P2, P3, P4, P5, P6, P7, P8, P9 = pts
+    
+    # Rotated arc centre
+    c, s = np.cos(theta), np.sin(theta)
+    cx_arc = c * _ARC_CX
+    cy_arc = s * _ARC_CX
     
     # Opening arc P9 → P1 (CCW at bore radius)
     a9 = np.arctan2(P9[1], P9[0])
@@ -164,13 +152,25 @@ def stator_slot_poly(i, n_arc=30):
     ox = R_si * np.cos(t_op)
     oy = R_si * np.sin(t_op)
     
-    # Slot bottom arc: P6→P5 (95° CCW) then P5→P4 (95° CCW)
-    bx1, by1 = slot_bottom_arc_s(P5, P6, n_arc // 2)
-    bx2, by2 = slot_bottom_arc_s(P4, P5, n_arc // 2)
+    # Slot bottom arc: two halves P4→P5 then P5→P6 (CCW going CW side→deep→CCW side)
+    # Note: in the base profile, P4 is CCW tangent (+y), P6 is CW tangent (-y)
+    # Arc goes from P6 (CW) → P5 (deep) → P4 (CCW) i.e. CCW direction
+    bx1, by1 = slot_bottom_arc_s(P6, P5, cx_arc, cy_arc, n_arc // 2)
+    bx2, by2 = slot_bottom_arc_s(P5, P4, cx_arc, cy_arc, n_arc // 2)
     
-    # Full polygon: opening → right side → arc (two halves) → left side
-    px = np.concatenate([ox, [P2[0], P3[0], P4[0]], bx2, bx1, [P7[0], P8[0]]])
-    py = np.concatenate([oy, [P2[1], P3[1], P4[1]], by2, by1, [P7[1], P8[1]]])
+    # Full polygon: opening(P9→P1) → P2 → P3 → P4 → arc(P4→P5→P6) reversed → P7 → P8
+    # Actually: path goes P1→P2→P3→P4, then arc from P4→P5→P6 (CW = inward),
+    # but we need to think in terms of a closed polygon outline.
+    # Outline: bore_opening(P9→P1), right_wall(P1→P2→P3→P4), 
+    #          bottom_arc(P4 going CCW to P6 via P5 reversed = going CW from P4 to P6),
+    #          left_wall(P6→P7→P8→P9)
+    # The arc from P6→P5→P4 (CCW) gives us the points in the wrong order for our path.
+    # We want P4→P5→P6 which is CW = reverse of CCW.
+    arc_x = np.concatenate([bx2[::-1], bx1[::-1]])
+    arc_y = np.concatenate([by2[::-1], by1[::-1]])
+    
+    px = np.concatenate([ox, [P2[0], P3[0]], arc_x, [P7[0], P8[0]]])
+    py = np.concatenate([oy, [P2[1], P3[1]], arc_y, [P7[1], P8[1]]])
     return px, py
 
 
