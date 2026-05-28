@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.27)  28 MAY 2026 16:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.27)  28 MAY 2026 16:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -551,11 +551,15 @@ T1/ptm/m/n/12 ).
 dist/fonts/enc/dvips/base/8r.enc}
 
 ] [2]
-<motor_composite_figure.png, id=18, 1260.3085pt x 518.3365pt>
+<motor_composite_figure.png, id=18, 985.6825pt x 1101.3145pt>
 File: motor_composite_figure.png Graphic file (type png)
 <use motor_composite_figure.png>
 Package pdftex.def Info: motor_composite_figure.png  used on input line 294.
-(pdftex.def)             Requested size: 483.69687pt x 198.93138pt.
+(pdftex.def)             Requested size: 483.69687pt x 540.43864pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 <Bg_spatial_I.png, id=20, 722.7pt x 252.945pt>
 File: Bg_spatial_I.png Graphic file (type png)
 <use Bg_spatial_I.png>
@@ -566,7 +570,6 @@ File: Bg_spatial_III.png Graphic file (type png)
 <use Bg_spatial_III.png>
 Package pdftex.def Info: Bg_spatial_III.png  used on input line 312.
 (pdftex.def)             Requested size: 232.17242pt x 81.26054pt.
-
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
@@ -583,9 +586,6 @@ Package pdftex.def Info: Bg_spectrum_III.png  used on input line 327.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 3
 60.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
@@ -594,14 +594,17 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[3 <./motor_composite_figure.png>] [4 <./Bg_spatial_I.png> <./Bg_spatial_III.pn
-g> <./Bg_spectrum_I.png> <./Bg_spectrum_III.png>]
+[3]
+Overfull \vbox (2.26334pt too high) has occurred while \output is active []
+
+
+[4 <./motor_composite_figure.png> <./Bg_spatial_I.png> <./Bg_spatial_III.png>]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
 46.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [5] (./relatorio.aux)
+) [5 <./Bg_spectrum_I.png> <./Bg_spectrum_III.png>] (./relatorio.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -610,7 +613,7 @@ L3 programming layer <2024-01-22>
 Here is how much of TeX's memory you used:
  11765 strings out of 476089
  248714 string characters out of 5793232
- 1946975 words of memory out of 5000000
+ 1947975 words of memory out of 5000000
  33616 multiletter control sequences out of 15000+600000
  614426 words of font info for 136 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
@@ -624,7 +627,7 @@ mf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on relatorio.pdf (5 pages, 1379154 bytes).
+Output written on relatorio.pdf (5 pages, 2502738 bytes).
 PDF statistics:
  88 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream
