@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.27)  28 MAY 2026 15:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.5.27)  27 MAY 2026 10:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**relatorio.tex
-(./relatorio.tex
+**"/home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/relatorio.tex"
+(/home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/relatorio.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -378,7 +378,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: pdftex.def on input line 149.
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx))
-LaTeX Font Info:    Trying to load font information for T1+ptm on input line 52
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 54
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd
@@ -389,23 +389,23 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count303
 \l__pdf_internal_box=\box65
 )
-(./relatorio.aux)
+(/home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/relatorio.aux)
 \openout1 = `relatorio.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -472,154 +472,337 @@ File: translations-basic-dictionary-brazil.trsl (brazil translation file `trans
 lations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `brazil'. on input line 52.
+or `brazil'. on input line 54.
 LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
- 74.
+ 76.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
- 74.
+ 76.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
- 74.
+ 76.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
- 74.
+ 76.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 7
-4.
+6.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 74.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 76.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 74.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 76.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 74.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 76.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 92.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 94.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 92.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 94.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 92.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 94.
 
-Overfull \hbox (1.4136pt too wide) in paragraph at lines 141--148
-\T1/ptm/m/n/12 Para passo pleno ($\OML/ztmcm/m/it/12 ^^L[]\OT1/ztmcm/m/n/12 1$\
-T1/ptm/m/n/12 ): $\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = [] 90[] = 1[]0000$
-\T1/ptm/m/n/12 , logo $\OML/ztmcm/m/it/12 k[] \OT1/ztmcm/m/n/12 = 0[]9659$\T1/p
-tm/m/n/12 . Para passo en-cur-tado ($\OML/ztmcm/m/it/12 ^^L[]\OT1/ztmcm/m/n/12 
-5\OML/ztmcm/m/it/12 =\OT1/ztmcm/m/n/12 6$\T1/ptm/m/n/12 ):
- []
 
+LaTeX Warning: Command \textdegree invalid in math mode on input line 119.
+
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
+19.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 119.
+
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 121.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 121.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 121.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 121.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 122.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 122.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 122.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 122.
+
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 126.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 126.
+
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 128.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 128.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 128.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 128.
+
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 134.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 134.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 134.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 134.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 134.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 134.
+
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 135.
+
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 143.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 143.
+
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 143.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 143.
+
+Missing character: There is no ∞ in font zptmcm7t!
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (90.41008pt too wide) in paragraph at lines 177--185
-\OMS/ztmcm/m/n/12 j\OML/ztmcm/m/it/12 k[]\OMS/ztmcm/m/n/12 j[]\OT1/ztmcm/m/n/12
- 0[]966$ \T1/ptm/m/n/12 para $\OML/ztmcm/m/it/12 ^^W \OMS/ztmcm/m/n/12 ^^Q ^^F\
-OT1/ztmcm/m/n/12 1([]12)$ \T1/ptm/m/n/12 e $\OMS/ztmcm/m/n/12 j\OML/ztmcm/m/it/
-12 k[]\OMS/ztmcm/m/n/12 j[]\OT1/ztmcm/m/n/12 0[]259$ \T1/ptm/m/n/12 para $\OML/
-ztmcm/m/it/12 ^^W \OMS/ztmcm/m/n/12 ^^Q ^^F\OT1/ztmcm/m/n/12 5([]12)$\T1/ptm/m/
-n/12 . Em par-ti-cu-lar, $\OMS/ztmcm/m/n/12 j\OML/ztmcm/m/it/12 k[]\OMS/ztmcm/m
-/n/12 j[]j\OML/ztmcm/m/it/12 k[]\OMS/ztmcm/m/n/12 j[]j\OML/ztmcm/m/it/12 k[]\OM
-S/ztmcm/m/n/12 j[]\OT1/ztmcm/m/n/12 0[]966$
- []
+LaTeX Warning: Command \textdegree invalid in math mode on input line 161.
 
 
-Overfull \hbox (31.92429pt too wide) in paragraph at lines 177--185
-\T1/ptm/m/n/12 --- di-fe-ren-te-mente do caso $\OML/ztmcm/m/it/12 q[]\OT1/ztmcm
-/m/n/12 4$ \T1/ptm/m/n/12 ($\OML/ztmcm/m/it/12 Q[][]\OT1/ztmcm/m/n/12 72$\T1/pt
-m/m/n/12 ), onde es-ses harmÙ-ni-cos eram for-te-mente ate-nu-a-dos ($\OMS/ztmc
-m/m/n/12 j\OML/ztmcm/m/it/12 k[]\OMS/ztmcm/m/n/12 j[]\OT1/ztmcm/m/n/12 0[]126$\
-T1/ptm/m/n/12 ).
- []
+LaTeX Warning: Command \textdegree invalid in math mode on input line 161.
 
+Missing character: There is no ∞ in font zptmcm7t!
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-
 dist/fonts/enc/dvips/base/8r.enc}
 
-] [2]
-<motor_geometry_new.png, id=18, 514.92375pt x 532.99126pt>
+]
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 180.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 180.
+
+Missing character: There is no ∞ in font zptmcm7t!
+[2]
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 258.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 258.
+
+Missing character: There is no ∞ in font zptmcm7t!
+<motor_geometry_new.png, id=19, 514.92375pt x 532.99126pt>
 File: motor_geometry_new.png Graphic file (type png)
 <use motor_geometry_new.png>
-Package pdftex.def Info: motor_geometry_new.png  used on input line 294.
-(pdftex.def)             Requested size: 290.22107pt x 300.40868pt.
-<Bg_spatial_I.png, id=20, 722.7pt x 252.945pt>
+Package pdftex.def Info: motor_geometry_new.png  used on input line 262.
+(pdftex.def)             Requested size: 396.63496pt x 410.55907pt.
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 266.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 266.
+
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 266.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 266.
+
+Missing character: There is no ∞ in font zptmcm7t!
+<stator_geometry_new.png, id=21, 975.19331pt x 485.11238pt>
+File: stator_geometry_new.png Graphic file (type png)
+<use stator_geometry_new.png>
+Package pdftex.def Info: stator_geometry_new.png  used on input line 276.
+(pdftex.def)             Requested size: 239.42758pt x 119.10155pt.
+<rotor_geometry_new.png, id=22, 887.56593pt x 485.11238pt>
+File: rotor_geometry_new.png Graphic file (type png)
+<use rotor_geometry_new.png>
+Package pdftex.def Info: rotor_geometry_new.png  used on input line 281.
+(pdftex.def)             Requested size: 239.42758pt x 130.85625pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+Missing character: There is no ∞ in font zptmcm7t!
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 305.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 305.
+
+Missing character: There is no ∞ in font zptmcm7t!
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<Bg_spatial_I.png, id=23, 722.7pt x 252.945pt>
 File: Bg_spatial_I.png Graphic file (type png)
 <use Bg_spatial_I.png>
-Package pdftex.def Info: Bg_spatial_I.png  used on input line 309.
-(pdftex.def)             Requested size: 232.17242pt x 81.26054pt.
-<Bg_spatial_III.png, id=21, 722.7pt x 252.945pt>
+Package pdftex.def Info: Bg_spatial_I.png  used on input line 321.
+(pdftex.def)             Requested size: 239.42758pt x 83.80017pt.
+<Bg_spatial_III.png, id=24, 722.7pt x 252.945pt>
 File: Bg_spatial_III.png Graphic file (type png)
 <use Bg_spatial_III.png>
-Package pdftex.def Info: Bg_spatial_III.png  used on input line 310.
-(pdftex.def)             Requested size: 232.17242pt x 81.26054pt.
+Package pdftex.def Info: Bg_spatial_III.png  used on input line 326.
+(pdftex.def)             Requested size: 239.42758pt x 83.80017pt.
+
+Underfull \hbox (badness 1072) in paragraph at lines 327--327
+[]|\T1/ptm/m/n/10.95 (b) Con-fig III -- passo en-cur-tado $\OT1/ztmcm/m/n/10.95
+ 5\OML/ztmcm/m/it/10.95 =\OT1/ztmcm/m/n/10.95 6$ \T1/ptm/m/n/10.95 ($\OML/ztmcm
+/m/it/10.95 I[][]\OT1/ztmcm/m/n/10.95 5[]07 A$\T1/ptm/m/n/10.95 ,
+ []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<Bg_spectrum_I.png, id=22, 867.24pt x 289.08pt>
+[3 </home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/motor_geometry_new.png
+>]
+<Bg_spectrum_I.png, id=29, 867.24pt x 289.08pt>
 File: Bg_spectrum_I.png Graphic file (type png)
 <use Bg_spectrum_I.png>
-Package pdftex.def Info: Bg_spectrum_I.png  used on input line 324.
-(pdftex.def)             Requested size: 232.17242pt x 77.39099pt.
-<Bg_spectrum_III.png, id=23, 867.24pt x 289.08pt>
+Package pdftex.def Info: Bg_spectrum_I.png  used on input line 350.
+(pdftex.def)             Requested size: 239.42758pt x 79.80821pt.
+<Bg_spectrum_III.png, id=30, 867.24pt x 289.08pt>
 File: Bg_spectrum_III.png Graphic file (type png)
 <use Bg_spectrum_III.png>
-Package pdftex.def Info: Bg_spectrum_III.png  used on input line 325.
-(pdftex.def)             Requested size: 232.17242pt x 77.39099pt.
-[3 <./motor_geometry_new.png>]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 3
-58.
+Package pdftex.def Info: Bg_spectrum_III.png  used on input line 355.
+(pdftex.def)             Requested size: 239.42758pt x 79.80821pt.
+<Bg_comparison.png, id=31, 794.97pt x 325.215pt>
+File: Bg_comparison.png Graphic file (type png)
+<use Bg_comparison.png>
+Package pdftex.def Info: Bg_comparison.png  used on input line 368.
+(pdftex.def)             Requested size: 469.18654pt x 191.94466pt.
 
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [4 <./Bg_spatial_I.png> <./Bg_spatial_III.png> <./Bg_spectrum_I.png> <./Bg_sp
-ectrum_III.png>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 406.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 406.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[4 </home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/stator_geometry_new.pn
+g> </home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/rotor_geometry_new.png
+> </home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/Bg_spatial_I.png> </hom
+e/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/Bg_spatial_III.png> </home/rib
+b/√Årea de trabalho/ufmg/trab_femm/overleaf/Bg_spectrum_I.png> </home/ribb/√Åre
+a de trabalho/ufmg/trab_femm/overleaf/Bg_spectrum_III.png>] [5 </home/ribb/√Åre
+a de trabalho/ufmg/trab_femm/overleaf/Bg_comparison.png>]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
-44.
+63.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [5] (./relatorio.aux)
+) [6]
+(/home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/relatorio.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 11765 strings out of 476089
- 248686 string characters out of 5793232
- 1946975 words of memory out of 5000000
- 33616 multiletter control sequences out of 15000+600000
- 614426 words of font info for 136 fonts, out of 8000000 for 9000
+ 11813 strings out of 476089
+ 250061 string characters out of 5793232
+ 1945975 words of memory out of 5000000
+ 33656 multiletter control sequences out of 15000+600000
+ 627022 words of font info for 161 fonts, out of 8000000 for 9000
  61 hyphenation exceptions out of 8191
- 73i,13n,80p,1198b,875s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 73i,15n,80p,1253b,975s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/ribb/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600p
 k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
-mb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on relatorio.pdf (5 pages, 557911 bytes).
+mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol
+/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on "/home/ribb/√Årea de trabalho/ufmg/trab_femm/overleaf/relator
+io.pdf" (6 pages, 1089451 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 45 compressed objects within 1 object stream
+ 107 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
